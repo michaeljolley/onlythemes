@@ -13,7 +13,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/exegeteio"><img src="https://avatars.githubusercontent.com/u/2538668?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jack M.</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/commits?author=exegeteio" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/exegeteio"><img src="https://avatars.githubusercontent.com/u/2538668?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jack M.</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/commits?author=exegeteio" title="Documentation">📖</a> <a href="#ideas-exegeteio" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://ifyoudo.net"><img src="https://avatars.githubusercontent.com/u/317770?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mikael Syska</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/commits?author=syska" title="Code">💻</a></td>
   </tr>
 </table>
