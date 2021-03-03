@@ -1,6 +1,6 @@
 # onlythemes
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 VS Code themes that match your personality profile.
 
@@ -14,6 +14,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/exegeteio"><img src="https://avatars.githubusercontent.com/u/2538668?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jack M.</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/commits?author=exegeteio" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://ifyoudo.net"><img src="https://avatars.githubusercontent.com/u/317770?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mikael Syska</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/commits?author=syska" title="Code">💻</a></td>
   </tr>
 </table>
 
