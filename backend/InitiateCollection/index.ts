@@ -1,4 +1,6 @@
 import { AzureFunction, Context } from "@azure/functions";
+import * as df from "durable-functions"
+
 import fetch from 'node-fetch';
 import { APIResponse } from '../Models/apiResponse';
 import { Extension } from '../Models/extension';
@@ -10,7 +12,7 @@ const headers = {
   'Content-Type': 'application/json',
   Accept: 'application/json;api-version=3.0-preview.1'
 };
-const pageSize = 100;
+const pageSize = 10;
 
 let _context: Context;
 
@@ -26,9 +28,14 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
 
   context.log(`Found ${extensions.length} extensions`);
 
-  // Iterate through themes & pages of themes
+  if (extensions.length > 0) {
+    const themeCollector = df.getClient(context);
 
-  // For each theme, call ThemeCollector Durable Function
+    for (const extension of extensions) {
+      const instanceId = await themeCollector.startNew('ThemeCollector', undefined, extension);
+      context.log(`Starting ThemeCollector for ${extension.displayName}. (Instance ${instanceId})`);
+    }
+  }
 
   context.log(`${timeStamp}: InitiateCollection: Completed`);
 };
@@ -47,18 +54,18 @@ const getAllThemes = async (): Promise<Extension[]> => {
     currentTotal = initialResult.totalCount;
     totalPages = Math.ceil(currentTotal / pageSize);
 
-    currentPage++;
+    // currentPage++;
 
-    while (currentPage <= totalPages) {
+    // while (currentPage <= totalPages) {
 
-      const marketPlaceResult = await getThemes(currentPage);
+    //   const marketPlaceResult = await getThemes(currentPage);
 
-      if (marketPlaceResult) {
-        extensions.push(...marketPlaceResult.extensions);
-      }
+    //   if (marketPlaceResult) {
+    //     extensions.push(...marketPlaceResult.extensions);
+    //   }
 
-      currentPage++;
-    }
+    //   currentPage++;
+    // }
   }
 
   return extensions;

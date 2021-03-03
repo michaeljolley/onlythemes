@@ -1,7 +1,7 @@
 {
   "bindings": [
     {
-      "name": "name",
+      "name": "extension",
       "type": "activityTrigger",
       "direction": "in"
     }
