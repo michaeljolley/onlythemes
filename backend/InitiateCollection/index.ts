@@ -1,11 +1,12 @@
-import { AzureFunction, Context } from "@azure/functions"
+import { AzureFunction, Context } from "@azure/functions";
 import fetch from 'node-fetch';
-import { Extension } from '../Models/extension';
 import { APIResponse } from '../Models/apiResponse';
+import { Extension } from '../Models/extension';
 import { MarketplaceResult } from '../Models/marketplaceResult';
 
 const baseUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery';
 const headers = {
+  'User-Agent': 'OnlyThemes',
   'Content-Type': 'application/json',
   Accept: 'application/json;api-version=3.0-preview.1'
 };
