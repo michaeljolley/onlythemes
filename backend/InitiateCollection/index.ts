@@ -1,7 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions";
 import * as df from "durable-functions"
+import axios, { AxiosResponse } from 'axios';
 
-import fetch from 'node-fetch';
 import { APIResponse } from '../Models/apiResponse';
 import { Extension } from '../Models/extension';
 import { MarketplaceResult } from '../Models/marketplaceResult';
@@ -12,7 +12,7 @@ const headers = {
   'Content-Type': 'application/json',
   Accept: 'application/json;api-version=3.0-preview.1'
 };
-const pageSize = 10;
+const pageSize = 100;
 
 let _context: Context;
 
@@ -32,8 +32,26 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
     const themeCollector = df.getClient(context);
 
     for (const extension of extensions) {
-      const instanceId = await themeCollector.startNew('ThemeCollector', undefined, extension);
-      context.log(`Starting ThemeCollector for ${extension.displayName}. (Instance ${instanceId})`);
+
+      let shouldProcess = false;
+      let savedExtension: Extension;
+
+      const response = await axios(`${process.env.functionsUrl}GetExtension?extensionId=${extension.extensionId}`, {
+        validateStatus: (status: number) => status === 200 || status === 404
+      });
+      if (response.status === 200) {
+        savedExtension = await response.data;
+        extension.id = savedExtension.id;
+        if (new Date(extension.lastUpdated) > new Date(savedExtension.lastUpdated)) {
+          shouldProcess = true;
+        }
+      } else {
+        shouldProcess = true;
+      }
+
+      if (shouldProcess) {
+        const instanceId = await themeCollector.startNew('ThemeCollector', undefined, extension);
+      }
     }
   }
 
@@ -68,7 +86,10 @@ const getAllThemes = async (): Promise<Extension[]> => {
     // }
   }
 
-  return extensions;
+  return extensions.filter(f =>
+    !f.displayName.toLocaleLowerCase().includes('icon') &&
+    !f.extensionName.toLocaleLowerCase().includes('icon')
+  );
 }
 
 const getThemes = async (page: Number): Promise<MarketplaceResult | undefined> => {
@@ -93,13 +114,11 @@ const getThemes = async (page: Number): Promise<MarketplaceResult | undefined> =
   };
 
   try {
-    const response = await fetch(baseUrl, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body)
+    const response = await axios.post(baseUrl, body, {
+      headers
     });
-    if (response.ok) {
-      const apiResponse: APIResponse = await response.json();
+    if (response.status === 200) {
+      const apiResponse: APIResponse = response.data
 
       if (apiResponse.results && apiResponse.results.length > 0) {
         const extensions = apiResponse.results[0].extensions;

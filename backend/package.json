@@ -10,8 +10,10 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
+    "@azure/cosmos": "^3.9.5",
+    "axios": "^0.21.1",
     "durable-functions": "^1.4.6",
-    "node-fetch": "^2.6.1"
+    "puppeteer": "^8.0.0"
   },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",

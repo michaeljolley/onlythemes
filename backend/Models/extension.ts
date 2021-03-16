@@ -13,4 +13,5 @@ export interface Extension {
   shortDescription: string;
   statistics: Statistic[];
   versions: Version[];
+  id?: string;
 }
