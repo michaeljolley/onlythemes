@@ -11,7 +11,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:onlythemes-backend-helper.helloWorld"
+		"*"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -19,8 +19,28 @@
 			{
 				"command": "onlythemes-backend-helper.helloWorld",
 				"title": "Hello World"
+			},
+			{
+				"command": "onlythemes-backend-helper.installTheme",
+				"title": "Install Theme",
+				"category": "OnlyThemes"
+			},
+			{
+				"command": "onlythemes-backend-helper.nextTheme",
+				"title": "Next Theme",
+				"category": "OnlyThemes"
 			}
-		]
+		],
+		"configuration": {
+			"title": "OnlyThemes Backend",
+			"properties": {
+				"onlythemes-backend-helper.extensionId": {
+					"title": "Recently Installed Theme",
+					"type": "string",
+					"description": "The extension id that was just installed"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
