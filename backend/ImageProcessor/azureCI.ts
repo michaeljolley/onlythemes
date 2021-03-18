@@ -44,7 +44,7 @@ export class AzureCI {
           "image": `${this.registryServer}/code-server:latest`,
           "ports": [{
             "protocol": 'TCP',
-            "port": 80,
+            "port": 8080,
           }],
           "resources": {
             "requests": {
@@ -59,7 +59,7 @@ export class AzureCI {
       "osType": 'Linux',
       "ipAddress": {
         "ports": [{
-          "port": 80,
+          "port": 8080,
           "protocol": 'TCP'
         }],
         "type": "Public",
@@ -80,5 +80,10 @@ export class AzureCI {
     }
 
     return this.containerDeploymentResult;
+  }
+
+  destroyCI = async (containerInstance: ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse): Promise<void> => {
+
+
   }
 }

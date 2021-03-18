@@ -5,6 +5,7 @@ import axios, { AxiosResponse } from 'axios';
 import { APIResponse } from '../Models/apiResponse';
 import { Extension } from '../Models/extension';
 import { MarketplaceResult } from '../Models/marketplaceResult';
+import { Manifest } from '../Models/manifest';
 
 const baseUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery';
 const headers = {
@@ -50,7 +51,21 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
       }
 
       if (shouldProcess) {
-        const instanceId = await themeCollector.startNew('ThemeCollector', undefined, extension);
+
+        // Get manifest
+        const extensionManifest = extension.versions[0].files.find(f => f.assetType === 'Microsoft.VisualStudio.Code.Manifest');
+
+        if (extensionManifest) {
+
+          // In manifest, get all themes & call ThemeCollector for each
+          const manifest = await getManifest(extensionManifest.source);
+
+          if (manifest && manifest.contributes.themes?.length > 0) {
+            for (const theme of manifest.contributes.themes) {
+              const instanceId = await themeCollector.startNew('ThemeCollector', undefined, { extension, manifest, theme });
+            }
+          }
+        }
       }
     }
   }
@@ -135,6 +150,20 @@ const getThemes = async (page: Number): Promise<MarketplaceResult | undefined> =
 
         return marketplaceResult;
       }
+    }
+  }
+  catch (err) {
+    _context.log(err);
+  }
+  return undefined;
+}
+
+const getManifest = async (url: string): Promise<Manifest | undefined> => {
+  try {
+    const response = await axios.get(url);
+    if (response.status === 200) {
+      const manifest: Manifest = response.data
+      return manifest;
     }
   }
   catch (err) {
