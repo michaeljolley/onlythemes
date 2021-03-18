@@ -14,4 +14,6 @@ export interface Extension {
   statistics: Statistic[];
   versions: Version[];
   id?: string;
+  imageData?: unknown;
+  metaData?: unknown;
 }
