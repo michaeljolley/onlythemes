@@ -67,8 +67,11 @@ RUN npm install
 
 COPY . .
 RUN sudo mkdir -p ~/.config/code-server && \
+    sudo mkdir -p ~/.local/share/code-server/User && \
     sudo mv ./config.yaml ~/.config/code-server/config.yaml && \
-    sudo chown -R $USER:$USER /home/coder/.config
+    sudo mv ./settings.json ~/.local/share/code-server/User/settings.json && \
+    sudo chown -R $USER:$USER /home/coder/.config && \
+    sudo chown -R $USER:$USER /home/coder/.local
 
 RUN sudo rm /usr/bin/entrypoint.sh && \
     sudo ln -s ~/onlythemes/entrypoint.sh /usr/bin/entrypoint.sh
