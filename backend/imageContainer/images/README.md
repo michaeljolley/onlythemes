@@ -1,0 +1,1 @@
+Location used for our screenshots
