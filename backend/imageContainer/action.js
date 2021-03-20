@@ -1,3 +1,4 @@
+const axios = require('axios');
 const puppeteer = require('puppeteer');
 
 const screenshot = async (extension, theme) => {
@@ -28,9 +29,15 @@ const screenshot = async (extension, theme) => {
 
   await page.waitForTimeout(2000);
 
-  const screenshot = await page.screenshot({ path: `images/${extension}_${theme}.png`, fullPage: true });
+  const screenshot = await page.screenshot({ path: `images/${process.env.EXTENSION}_${process.env.THEME}.png`, fullPage: true });
 
   await browser.close();
+
+  await deleteCI();
 };
 
-screenshot(process.env.EXTENSION, process.env.THEME);
+const deleteCI = async () => {
+  await axios.post(`${functionsUrl}DeleteCI`, { containerInstanceId: process.env.CONTAINER_INSTANCE })
+}
+
+screenshot();

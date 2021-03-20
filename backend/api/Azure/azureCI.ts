@@ -19,7 +19,13 @@ export class AzureCI {
 
   private containerDeploymentResult: ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse;
 
-  createCI = async (extensionId: string, extensionName: string): Promise<ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse | undefined> => {
+  /**
+   * Creates an Azure container instance that runs VS Code 
+   * with the provided extension and theme name.
+   * @param extensionId The extension to install
+   * @param themeName The theme that exists within the extension to screenshot
+   */
+  createCI = async (extensionId: string, themeName: string): Promise<ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse | undefined> => {
 
     const { credentials } = await msRestNodeAuth.loginWithServicePrincipalSecretWithAuthResponse(this.clientId, this.secret, this.tenantId);
 
@@ -30,7 +36,6 @@ export class AzureCI {
       "containers": [
         {
           "name": this.uid,
-          // "command": taskParams.commandLine,
           "environmentVariables": [
             {
               "name": "EXTENSION_ID",
@@ -38,7 +43,11 @@ export class AzureCI {
             },
             {
               "name": "EXTENSION_NAME",
-              "value": extensionName
+              "value": themeName
+            },
+            {
+              "name": "CONTAINER_INSTANCE",
+              "value": this.uid
             }
           ],
           "image": `${this.registryServer}/code-server:latest`,
@@ -82,8 +91,16 @@ export class AzureCI {
     return this.containerDeploymentResult;
   }
 
-  destroyCI = async (containerInstance: ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse): Promise<void> => {
+  /**
+   * Deletes an Azure container instance group
+   * @param instanceId Id of the Azure container instance group to destroy
+   */
+  destroyCI = async (instanceId: string): Promise<void> => {
 
+    const { credentials } = await msRestNodeAuth.loginWithServicePrincipalSecretWithAuthResponse(this.clientId, this.secret, this.tenantId);
 
+    const client = new ContainerInstanceManagementClient(credentials, this.subscriptionId);
+
+    await client.containerGroups.deleteMethod('OnlyThemesRG', instanceId)
   }
 }
