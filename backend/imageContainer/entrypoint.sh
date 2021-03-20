@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Install the theme extension and run the server
-/usr/bin/code-server --install-extension $EXTENSION
+/usr/bin/code --install-extension $EXTENSION
 /usr/bin/code-server --bind-addr 0.0.0.0:8080 . &
 
 # Loop through the available themes within the extension
