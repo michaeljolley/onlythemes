@@ -12,6 +12,9 @@ export class AzureCI {
   private tenantId = process.env["servicePrincipalTenantId"];
   private subscriptionId = process.env["servicePrincipalSubscriptionId"];
 
+  private storageAccountName = process.env["storageAccountName"];
+  private storageAccountKey = process.env["storageAccountKey"];
+
   private registryServer = process.env["registryServer"];
   private registryUsername = process.env["registryUsername"];
   private registryPassword = process.env["registryPassword"];
@@ -23,9 +26,9 @@ export class AzureCI {
    * Creates an Azure container instance that runs VS Code 
    * with the provided extension and theme name.
    * @param extensionId The extension to install
-   * @param themeName The theme that exists within the extension to screenshot
+   * @param theme The theme that exists within the extension to screenshot
    */
-  createCI = async (extensionId: string, themeName: string): Promise<ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse | undefined> => {
+  createCI = async (extensionId: string, theme: string): Promise<ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse | undefined> => {
 
     const { credentials } = await msRestNodeAuth.loginWithServicePrincipalSecretWithAuthResponse(this.clientId, this.secret, this.tenantId);
 
@@ -38,12 +41,12 @@ export class AzureCI {
           "name": this.uid,
           "environmentVariables": [
             {
-              "name": "EXTENSION_ID",
+              "name": "EXTENSION",
               "value": extensionId
             },
             {
-              "name": "EXTENSION_NAME",
-              "value": themeName
+              "name": "THEME",
+              "value": theme
             },
             {
               "name": "CONTAINER_INSTANCE",
@@ -61,7 +64,12 @@ export class AzureCI {
               "memoryInGB": 1.5
             }
           },
-          "volumeMounts": []
+          "volumeMounts": [
+            {
+              "name": 'imagesfileshare',
+              "mountPath": '/images'
+            }
+          ]
         }
       ],
       "imageRegistryCredentials": [{ "server": this.registryServer, "username": this.registryUsername, "password": this.registryPassword }],
@@ -74,7 +82,17 @@ export class AzureCI {
         "type": "Public",
         "dnsNameLabel": this.uid
       },
-      "restartPolicy": 'Always',
+      "volumes": [
+        {
+          "name": 'imagesfileshare',
+          "azureFile": {
+            "shareName": 'extension-images',
+            "storageAccountName": this.storageAccountName,
+            "storageAccountKey": this.storageAccountKey
+          }
+        }
+      ],
+      "restartPolicy": 'Never',
       "type": "Microsoft.ContainerInstance/containerGroups",
       "name": this.uid
     }

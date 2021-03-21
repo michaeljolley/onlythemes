@@ -29,7 +29,7 @@ const screenshot = async (extension, theme) => {
 
   await page.waitForTimeout(2000);
 
-  const screenshot = await page.screenshot({ path: `images/${process.env.EXTENSION}_${process.env.THEME}.png`, fullPage: true });
+  const screenshot = await page.screenshot({ path: `/images/${process.env.EXTENSION}_${process.env.THEME}.png`, fullPage: true });
 
   await browser.close();
 

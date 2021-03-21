@@ -61,9 +61,7 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
           const manifest = await getManifest(extensionManifest.source);
 
           if (manifest && manifest.contributes.themes?.length > 0) {
-            for (const theme of manifest.contributes.themes) {
-              const instanceId = await themeCollector.startNew('ThemeCollector', undefined, { extension, manifest, theme });
-            }
+            const instanceId = await themeCollector.startNew('ThemeCollector', undefined, { extension, manifest });
           }
         }
       }
