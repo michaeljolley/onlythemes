@@ -1,25 +1,173 @@
-﻿import * as df from "durable-functions"
-import { Extension } from "../Models/extension";
-import { Manifest } from "../Models/manifest";
+import { AzureFunction, Context } from "@azure/functions";
+import axios from 'axios';
 
-const orchestrator = df.orchestrator(function* (context) {
+import { APIResponse } from '../Models/apiResponse';
+import { Extension } from '../Models/extension';
+import { MarketplaceResult } from '../Models/marketplaceResult';
+import { Manifest } from '../Models/manifest';
 
-    const payload = context.df.getInput() as any;
-    const extension: Extension = payload.extension;
-    const manifest: Manifest = payload.manifest;
+const baseUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery';
+const headers = {
+  'User-Agent': 'OnlyThemes',
+  'Content-Type': 'application/json',
+  Accept: 'application/json;api-version=3.0-preview.1'
+};
+const pageSize = 100;
 
-    // Get screenshots of themes and save to storage
-    const imageData = yield context.df.callActivity("ImageProcessor", { extension, manifest });
+let _context: Context;
 
-    // Get & load metadata about extension (i.e. color pallette)
-    const metaData = yield context.df.callActivity("Metadata", { extension, manifest });
+const timerTrigger: AzureFunction = async function (context: Context, myTimer: any): Promise<void> {
+  var timeStamp = new Date().toISOString();
 
-    if (imageData && metaData) {
-        // Load extension to database
-        extension.imageData = imageData;
-        extension.metaData = metaData;
-        yield context.df.callActivity("DataParser", extension);
+  context.log(`${timeStamp}: ThemeCollector: Start`);
+
+  _context = context;
+
+  // Hit the VS Code Marketplace API to get themes
+  const extensions: Extension[] = await getAllThemes();
+
+  context.log(`Found ${extensions.length} extensions`);
+
+  if (extensions.length > 0) {
+
+    for (const extension of extensions) {
+
+      let shouldProcess = false;
+      let savedExtension: Extension;
+
+      const response = await axios(`${process.env.functionsUrl}GetExtension?extensionId=${extension.extensionId}`, {
+        validateStatus: (status: number) => status === 200 || status === 404
+      });
+      if (response.status === 200) {
+        savedExtension = await response.data;
+        extension.id = savedExtension.id;
+        if (new Date(extension.lastUpdated) > new Date(savedExtension.lastUpdated)) {
+          shouldProcess = true;
+        }
+      } else {
+        shouldProcess = true;
+      }
+
+      if (shouldProcess) {
+
+        // Get manifest
+        const extensionManifest = extension.versions[0].files.find(f => f.assetType === 'Microsoft.VisualStudio.Code.Manifest');
+
+        if (extensionManifest) {
+
+          // In manifest, get all themes & call ThemeCollector for each
+          const manifest = await getManifest(extensionManifest.source);
+
+          if (manifest && manifest.contributes.themes?.length > 0) {
+            axios.post(`${process.env.functionsUrl}ThemeProcessor`, { extension, manifest }, {
+              validateStatus: (status: number) => status === 200 || status === 404
+            });
+          }
+        }
+      }
     }
-});
+  }
 
-export default orchestrator;
+  context.log(`${timeStamp}: ThemeCollector: Completed`);
+};
+
+const getAllThemes = async (): Promise<Extension[]> => {
+
+  let currentPage: number = 0;
+  let currentTotal: number = 0;
+  let totalPages: number = 0;
+  let extensions: Extension[] = [];
+
+  const initialResult = await getThemes(currentPage);
+
+  if (initialResult) {
+    extensions = initialResult.extensions;
+    currentTotal = initialResult.totalCount;
+    totalPages = Math.ceil(currentTotal / pageSize);
+
+    // currentPage++;
+
+    // while (currentPage <= totalPages) {
+
+    //   const marketPlaceResult = await getThemes(currentPage);
+
+    //   if (marketPlaceResult) {
+    //     extensions.push(...marketPlaceResult.extensions);
+    //   }
+
+    //   currentPage++;
+    // }
+  }
+
+  return extensions.filter(f =>
+    !f.displayName.toLocaleLowerCase().includes('icon') &&
+    !f.extensionName.toLocaleLowerCase().includes('icon')
+  );
+}
+
+const getThemes = async (page: Number): Promise<MarketplaceResult | undefined> => {
+
+  const body = {
+    filters: [
+      {
+        criteria: [
+          { filterType: 8, value: 'Microsoft.VisualStudio.Code' },
+          { filterType: 10, value: 'target:"Microsoft.VisualStudio.Code"' },
+          { filterType: 12, value: '5122' },
+          { filterType: 5, value: 'Themes' },
+        ],
+        direction: 2, // Not sure what this does.
+        pageSize,
+        pageNumber: page,
+        sortBy: 4, // Sorts by most downloads.
+        sortOrder: 0,
+      },
+    ],
+    flags: 914, // Settings flags to 914 will return the github link.
+  };
+
+  try {
+    const response = await axios.post(baseUrl, body, {
+      headers
+    });
+    if (response.status === 200) {
+      const apiResponse: APIResponse = response.data
+
+      if (apiResponse.results && apiResponse.results.length > 0) {
+        const extensions = apiResponse.results[0].extensions;
+        const resultCount = apiResponse.results[0].resultMetadata.find(f => f.metadataType === 'ResultCount' && f.metadataItems.length > 0);
+        let totalCount: number;
+        if (resultCount) {
+          totalCount = resultCount.metadataItems[0].count;
+        }
+
+        const marketplaceResult: MarketplaceResult = {
+          extensions,
+          totalCount
+        }
+
+        return marketplaceResult;
+      }
+    }
+  }
+  catch (err) {
+    _context.log(err);
+  }
+  return undefined;
+}
+
+const getManifest = async (url: string): Promise<Manifest | undefined> => {
+  try {
+    const response = await axios.get(url);
+    if (response.status === 200) {
+      const manifest: Manifest = response.data
+      return manifest;
+    }
+  }
+  catch (err) {
+    _context.log(err);
+  }
+  return undefined;
+}
+
+export default timerTrigger;

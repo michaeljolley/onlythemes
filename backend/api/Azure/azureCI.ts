@@ -11,6 +11,7 @@ export class AzureCI {
   private secret = process.env["servicePrincipalSecret"];
   private tenantId = process.env["servicePrincipalTenantId"];
   private subscriptionId = process.env["servicePrincipalSubscriptionId"];
+  private functionsUrl = process.env["functionsUrl"];
 
   private storageAccountName = process.env["storageAccountName"];
   private storageAccountKey = process.env["storageAccountKey"];
@@ -51,6 +52,10 @@ export class AzureCI {
             {
               "name": "CONTAINER_INSTANCE",
               "value": this.uid
+            },
+            {
+              "name": "FUNCTIONS_URL",
+              "value": this.functionsUrl
             }
           ],
           "image": `${this.registryServer}/code-server:latest`,

@@ -2,6 +2,7 @@ const axios = require('axios');
 const puppeteer = require('puppeteer');
 
 const screenshot = async (extension, theme) => {
+
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
   await page.setViewport({ width: 1920, height: 1080 });
@@ -32,12 +33,18 @@ const screenshot = async (extension, theme) => {
   const screenshot = await page.screenshot({ path: `/images/${process.env.EXTENSION}_${process.env.THEME}.png`, fullPage: true });
 
   await browser.close();
-
-  await deleteCI();
 };
 
 const deleteCI = async () => {
-  await axios.post(`${functionsUrl}DeleteCI`, { containerInstanceId: process.env.CONTAINER_INSTANCE })
+  await axios.post(`${process.env.FUNCTIONS_URL}DeleteCI`, { containerInstanceId: process.env.CONTAINER_INSTANCE })
 }
 
-screenshot();
+const main = async () => {
+  try {
+    await screenshot();
+  }
+  catch (err) {
+
+  }
+  await deleteCI();
+}
