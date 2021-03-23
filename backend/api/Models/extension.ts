@@ -7,6 +7,7 @@ export interface Extension {
   extensionId: string;
   extensionName: string;
   displayName: string;
+  lastCataloged: Date;
   lastUpdated: Date;
   publishedDate: Date;
   releaseDate: Date;
@@ -14,6 +15,4 @@ export interface Extension {
   statistics: Statistic[];
   versions: Version[];
   id?: string;
-  imageData?: unknown;
-  metaData?: unknown;
 }

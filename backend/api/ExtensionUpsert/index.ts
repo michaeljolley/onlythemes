@@ -9,11 +9,15 @@ const cosmosClient = new CosmosClient({ endpoint, key });
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-  const extension: Extension = context.bindings.extension;
+  const extension: Extension = req.body.extension;
 
-  context.log(`DataParser: ${extension.displayName}`);
+  context.log(`ExtensionUpsert: ${extension.displayName}`);
 
   if (extension) {
+
+    if (!extension.lastCataloged) {
+      extension.lastCataloged = new Date(2000, 1, 1);
+    }
 
     try {
       const { database } = await cosmosClient.databases.createIfNotExists({ id: "onlyThemesDb" });

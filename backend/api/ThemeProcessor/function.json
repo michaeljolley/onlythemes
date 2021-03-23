@@ -1,18 +1,15 @@
 {
   "bindings": [
     {
-      "authLevel": "anonymous",
-      "type": "httpTrigger",
+      "name": "myTimer",
+      "type": "timerTrigger",
       "direction": "in",
-      "name": "req",
-      "methods": [
-        "post"
-      ]
+      "schedule": "0 */30 * * * *"
     },
     {
-      "type": "http",
-      "direction": "out",
-      "name": "res"
+      "name": "starter",
+      "type": "orchestrationClient",
+      "direction": "in"
     }
   ],
   "scriptFile": "../dist/ThemeProcessor/index.js"

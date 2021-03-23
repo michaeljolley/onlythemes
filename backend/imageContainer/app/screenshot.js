@@ -1,7 +1,6 @@
-const axios = require('axios');
 const puppeteer = require('puppeteer');
 
-const screenshot = async (extension, theme) => {
+module.exports = async (themeId) => {
 
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
@@ -30,21 +29,7 @@ const screenshot = async (extension, theme) => {
 
   await page.waitForTimeout(2000);
 
-  const screenshot = await page.screenshot({ path: `/images/${process.env.EXTENSION}_${process.env.THEME}.png`, fullPage: true });
+  const screenshot = await page.screenshot({ path: `/images/${themeId}.png`, fullPage: true });
 
   await browser.close();
 };
-
-const deleteCI = async () => {
-  await axios.post(`${process.env.FUNCTIONS_URL}DeleteCI`, { containerInstanceId: process.env.CONTAINER_INSTANCE })
-}
-
-const main = async () => {
-  try {
-    await screenshot();
-  }
-  catch (err) {
-
-  }
-  await deleteCI();
-}

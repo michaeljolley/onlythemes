@@ -4,7 +4,6 @@ import axios from 'axios';
 import { APIResponse } from '../Models/apiResponse';
 import { Extension } from '../Models/extension';
 import { MarketplaceResult } from '../Models/marketplaceResult';
-import { Manifest } from '../Models/manifest';
 
 const baseUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery';
 const headers = {
@@ -35,7 +34,7 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
       let shouldProcess = false;
       let savedExtension: Extension;
 
-      const response = await axios(`${process.env.functionsUrl}GetExtension?extensionId=${extension.extensionId}`, {
+      const response = await axios(`${process.env.functionsUrl}ExtensionGet?extensionId=${extension.extensionId}`, {
         validateStatus: (status: number) => status === 200 || status === 404
       });
       if (response.status === 200) {
@@ -49,21 +48,9 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
       }
 
       if (shouldProcess) {
-
-        // Get manifest
-        const extensionManifest = extension.versions[0].files.find(f => f.assetType === 'Microsoft.VisualStudio.Code.Manifest');
-
-        if (extensionManifest) {
-
-          // In manifest, get all themes & call ThemeCollector for each
-          const manifest = await getManifest(extensionManifest.source);
-
-          if (manifest && manifest.contributes.themes?.length > 0) {
-            axios.post(`${process.env.functionsUrl}ThemeProcessor`, { extension, manifest }, {
-              validateStatus: (status: number) => status === 200 || status === 404
-            });
-          }
-        }
+        axios.post(`${process.env.functionsUrl}ExtensionUpsert`, { extension }, {
+          validateStatus: (status: number) => status === 200 || status === 404
+        });
       }
     }
   }
@@ -85,18 +72,18 @@ const getAllThemes = async (): Promise<Extension[]> => {
     currentTotal = initialResult.totalCount;
     totalPages = Math.ceil(currentTotal / pageSize);
 
-    // currentPage++;
+    currentPage++;
 
-    // while (currentPage <= totalPages) {
+    while (currentPage <= totalPages) {
 
-    //   const marketPlaceResult = await getThemes(currentPage);
+      const marketPlaceResult = await getThemes(currentPage);
 
-    //   if (marketPlaceResult) {
-    //     extensions.push(...marketPlaceResult.extensions);
-    //   }
+      if (marketPlaceResult) {
+        extensions.push(...marketPlaceResult.extensions);
+      }
 
-    //   currentPage++;
-    // }
+      currentPage++;
+    }
   }
 
   return extensions.filter(f =>
@@ -148,20 +135,6 @@ const getThemes = async (page: Number): Promise<MarketplaceResult | undefined> =
 
         return marketplaceResult;
       }
-    }
-  }
-  catch (err) {
-    _context.log(err);
-  }
-  return undefined;
-}
-
-const getManifest = async (url: string): Promise<Manifest | undefined> => {
-  try {
-    const response = await axios.get(url);
-    if (response.status === 200) {
-      const manifest: Manifest = response.data
-      return manifest;
     }
   }
   catch (err) {
