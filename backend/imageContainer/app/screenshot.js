@@ -27,7 +27,7 @@ module.exports = async (themeId) => {
 
   await page.keyboard.press('Enter');
 
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(10000);
 
   const screenshot = await page.screenshot({ path: `/images/${themeId}.png`, fullPage: true });
 

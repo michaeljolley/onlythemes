@@ -26,9 +26,9 @@ export class AzureCI {
   /**
    * Creates an Azure container instance that runs VS Code 
    * with the provided extension and theme name.
-   * @param extensionId The extension to install
+   * @param extensionName The extension to install
    */
-  createCI = async (extensionId: string): Promise<ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse | undefined> => {
+  createCI = async (extensionName: string, extensionId: string): Promise<ContainerInstanceManagementModels.ContainerGroupsCreateOrUpdateResponse | undefined> => {
 
     const { credentials } = await msRestNodeAuth.loginWithServicePrincipalSecretWithAuthResponse(this.clientId, this.secret, this.tenantId);
 
@@ -42,6 +42,10 @@ export class AzureCI {
           "environmentVariables": [
             {
               "name": "EXTENSION",
+              "value": extensionName
+            },
+            {
+              "name": "EXTENSION_ID",
               "value": extensionId
             },
             {

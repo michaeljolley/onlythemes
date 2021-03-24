@@ -14,7 +14,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
   // Deploy Azure Container Instance to generate screen shots
   const azureCI = new AzureCI();
-  await azureCI.createCI(`${extension.publisher.publisherName}.${extension.extensionName}`);
+  await azureCI.createCI(`${extension.publisher.publisherName}.${extension.extensionName}`, extension.extensionId);
 
   context.res = {
     status: 200

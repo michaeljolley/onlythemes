@@ -42,7 +42,7 @@ const getThemes = async (): Promise<Extension[]> => {
   // Lookup the extensionId in CosmosDb
   const { resources } = await container.items
     .query({
-      query: "SELECT TOP 100 * from c WHERE c.lastCataloged < c.lastUpdated ORDER BY c.lastCataloged"
+      query: "SELECT TOP 80 * from c WHERE c.lastCataloged < c.lastUpdated ORDER BY c.lastCataloged"
     })
     .fetchAll();
 
