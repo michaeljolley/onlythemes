@@ -17,6 +17,7 @@ const loadManifest = async () => {
 }
 
 const setTheme = async (themeLabel) => {
+  console.log(themeLabel);
   await fs.writeFile('/home/coder/.local/share/code-server/User/settings.json', `{\
     "workbench.colorTheme": "${themeLabel}"\
   }`);
@@ -24,6 +25,13 @@ const setTheme = async (themeLabel) => {
 
 const updateExtension = async (extensionId) => {
   await axios.get(`${process.env.FUNCTIONS_URL}ExtensionCataloged?extensionId=${process.env.EXTENSION_ID}`);
+}
+
+const recordError = async (error) => {
+  await axios.post(`${process.env.FUNCTIONS_URL}ExtensionError`, {
+    extensionId: process.env.EXTENSION_ID,
+    error
+  });
 }
 
 const main = async () => {
@@ -39,14 +47,31 @@ const main = async () => {
       // for each theme in manifest
       for (const manifestTheme of manifest.contributes.themes) {
 
-        await setTheme(manifestTheme.label);
+        try {
+          await setTheme(manifestTheme.label);
+        }
+        catch (err) {
+          await recordError(`setTheme: ${err}`);
+          throw (err)
+        }
 
-        const theme = await saveTheme(extensionDir, manifestTheme);
+        try {
+          const theme = await saveTheme(extensionDir, manifestTheme);
+        }
+        catch (err) {
+          await recordError(`saveTheme: ${err}`);
+          throw (err)
+        }
 
-        await screenshot(theme.id);
+        try {
+          await screenshot(theme.id);
+        }
+        catch (err) {
+          await recordError(`screenshot: ${err}`);
+          throw (err)
+        }
 
         console.log(`Saved ${theme.name}`);
-
       }
     }
 

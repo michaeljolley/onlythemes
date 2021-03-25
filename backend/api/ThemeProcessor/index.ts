@@ -8,7 +8,6 @@ const endpoint = process.env.cosmosDbEndpoint;
 const key = process.env.cosmosDbKey;
 const cosmosClient = new CosmosClient({ endpoint, key });
 
-
 let _context: Context;
 
 const timerTrigger: AzureFunction = async function (context: Context, myTimer: any): Promise<void> {
@@ -42,7 +41,7 @@ const getThemes = async (): Promise<Extension[]> => {
   // Lookup the extensionId in CosmosDb
   const { resources } = await container.items
     .query({
-      query: "SELECT TOP 80 * from c WHERE c.lastCataloged < c.lastUpdated ORDER BY c.lastCataloged"
+      query: "SELECT TOP 80 * from c WHERE c.lastCataloged < c.lastUpdated AND NOT IS_DEFINED(c.error) ORDER BY c.lastCataloged"
     })
     .fetchAll();
 

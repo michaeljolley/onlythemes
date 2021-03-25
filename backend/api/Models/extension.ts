@@ -15,4 +15,5 @@ export interface Extension {
   statistics: Statistic[];
   versions: Version[];
   id?: string;
+  error?: string;
 }

@@ -4,8 +4,8 @@
       "name": "myTimer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "0 */30 * * * *"
+      "schedule": "0 0 */3 * * *"
     }
   ],
-  "scriptFile": "../dist/ThemeProcessor/index.js"
+  "scriptFile": "../dist/CleanCI/index.js"
 }

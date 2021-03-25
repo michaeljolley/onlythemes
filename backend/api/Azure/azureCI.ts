@@ -4,6 +4,7 @@ import {
   ContainerInstanceManagementModels
 } from "@azure/arm-containerinstance";
 import * as uuid from 'uuid';
+import { ContainerGroupsListResponse } from "@azure/arm-containerinstance/esm/models";
 
 export class AzureCI {
 
@@ -124,5 +125,19 @@ export class AzureCI {
     const client = new ContainerInstanceManagementClient(credentials, this.subscriptionId);
 
     await client.containerGroups.deleteMethod('OnlyThemesRG', instanceId)
+  }
+
+  cleanCI = async (): Promise<void> => {
+
+    const { credentials } = await msRestNodeAuth.loginWithServicePrincipalSecretWithAuthResponse(this.clientId, this.secret, this.tenantId);
+    const client = new ContainerInstanceManagementClient(credentials, this.subscriptionId);
+
+    const containerGroupList: ContainerGroupsListResponse = await client.containerGroups.list();
+
+    const failedContainerGroups = containerGroupList.filter(f => f.provisioningState === 'Failed');
+
+    for (const containerGroup of failedContainerGroups) {
+      await this.destroyCI(containerGroup.name);
+    }
   }
 }

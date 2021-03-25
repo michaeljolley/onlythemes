@@ -8,3 +8,5 @@
 # Wait for the server to complete initialization
 sleep .5
 node ~/onlythemes/app/start.js
+
+tail -f /dev/null
