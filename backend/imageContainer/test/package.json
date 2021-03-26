@@ -1,0 +1,48 @@
+{
+	"name": "Theme-MarkdownKit",
+	"displayName" : "Markdown Theme Kit",
+	"description": "Theme Kit for VS Code optimized for Markdown. Based on the TextMate themes.",
+	"version": "0.1.4",
+	"publisher": "ms-vscode",
+	"engines": {
+		"vscode": "0.10.x"
+	},
+	"categories": [
+		"Themes"
+	],
+	"license": "SEE LICENSE IN LICENSE.txt",
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-themes/issues"
+	},
+	"homepage": "https://github.com/Microsoft/vscode-themes/blob/master/markdown-editing/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-themes.git"
+	},
+	"icon":"icon.png",
+	"contributes": {
+		"themes": [
+			{
+				"label": "Markdown Editor",
+				"uiTheme": "vs",
+				"path": "./themes/MarkdownEditor.tmTheme"
+			},
+			{
+				"label": "Markdown Editor Dark",
+				"uiTheme": "vs-dark",
+				"path": "./themes/MarkdownEditor-Dark.tmTheme"
+			},
+			{
+				"label": "Markdown Editor Focus",
+				"uiTheme": "vs",
+				"path": "./themes/MarkdownEditor-Focus.tmTheme"
+			},
+
+			{
+				"label": "Markdown Editor Yellow",
+				"uiTheme": "vs",
+				"path": "./themes/MarkdownEditor-Yellow.tmTheme"
+			}
+		]
+	}
+}
