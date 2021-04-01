@@ -3,25 +3,44 @@ import * as path from 'path'
 import { parse } from 'comment-json'
 import axios from 'axios'
 
+import { parse as plistparse } from './vscode/plistParser'
+import { ITextMateThemingRule, IColorMap } from './vscode/workbenchThemeService'
+import { convertSettings } from './vscode/themeCapability'
+
 export const saveTheme = async (extensionDir: string, manifestTheme: any) => {
 
-  const colorPath = path.join(`/home/coder/.vscode/extensions/${extensionDir}/`, manifestTheme.path);
+  const themePath = path.join(`/home/coder/.vscode/extensions/${extensionDir}/`, manifestTheme.path);
 
-  const themeData = await fs.readFile(colorPath);
+  const themeData = await fs.readFile(themePath, { encoding: 'utf-8' });
 
-  const rawTheme = parse(themeData.toString());
+  if (path.extname(manifestTheme.path) === '.json') {
+    const rawTheme = parse(themeData.toString());
 
-  // format that JSON to match the TypeScript model for Theme
-  const theme = {
-    name: rawTheme.name,
-    colors: rawTheme.colors,
-    tokenColors: rawTheme.tokenColors,
-    semanticHighlighting: rawTheme.semanticHighlighting,
-    extensionId: process.env.EXTENSION
-  };
+    // format that JSON to match the TypeScript model for Theme
+    const theme = {
+      name: rawTheme.name,
+      colors: rawTheme.colors,
+      tokenColors: rawTheme.tokenColors,
+      semanticHighlighting: rawTheme.semanticHighlighting,
+      extensionId: process.env.EXTENSION
+    };
+  
+    // save that object to CosmosDb
+    return await _saveTheme(theme);
+  } else { // theme data is a plist of info
+    const plist = plistparse(themeData)
+    let settings: ITextMateThemingRule[] = plist.settings
+    if (!Array.isArray(settings)) {
+      return Promise.reject(new Error("error.plist.invalidFormat"))
+    }
+    let result: { textMateRules: ITextMateThemingRule[], colors: IColorMap } = {
+      textMateRules: [],
+      colors: {}
+    };
+    convertSettings(settings, result)
+    return await _saveTheme(result)
+  }
 
-  // save that object to CosmosDb
-  return await _saveTheme(theme);
 }
 
 const _saveTheme = async (theme: any) => {
