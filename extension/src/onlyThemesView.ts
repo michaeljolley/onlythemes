@@ -10,7 +10,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     private _state: vscode.Memento,
     private readonly _extensionUri: vscode.Uri) {  }
 
-  public resolveWebviewView(
+  public async resolveWebviewView(
     webviewView: vscode.WebviewView,
     context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken,
@@ -25,8 +25,6 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         this._extensionUri
       ]
     };
-
-    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
     webviewView.webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
@@ -49,7 +47,11 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
       }
       await this.getThemeSuggestion();
     });
+
+    await this.getThemeSuggestion();
   }
+
+  
 
   public async getThemeSuggestion(): Promise<void> {
     if (this._view) {
@@ -58,7 +60,8 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         const theme = await response.json();
 
         this._view.show?.(true); // `show` is not implemented in 1.49 but is for 1.50 insiders
-        this._view.webview.postMessage({ type: 'loadTheme', data: theme });
+
+        this._view.webview.html = this._getHtmlForWebview(theme);
       }
       catch(err) {
         console.error(err);
@@ -66,17 +69,19 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     }
   }
 
-  private _getHtmlForWebview(webview: vscode.Webview) {
+  private _getHtmlForWebview(theme: any) {
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+    const scriptUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
     // Do the same for the stylesheet.
-    const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
-    const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
-    const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+    const styleResetUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
+    const styleVSCodeUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
+    const styleMainUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
 
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
+
+// 	<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._view?.webview.cspSource}; script-src 'nonce-${nonce}';">
 
     return `<!DOCTYPE html>
 			<html lang="en">
@@ -86,7 +91,6 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleResetUri}" rel="stylesheet">
 				<link href="${styleVSCodeUri}" rel="stylesheet">
@@ -95,10 +99,22 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 				<title>Only Themes</title>
 			</head>
 			<body>
-        <img id="themeImage"/>
-        <a id="imageUrl">Click me yo</a>
-				<button class="swipe-left-button">Swipe Left</button>
-				<button class="swipe-right-button">Swipe Right</button>
+        <article>
+          <header>
+            <h1>${theme.name}</h1>
+          </header>
+          <main>
+            <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">
+            <h2>Author: Yo mama</h2>
+
+            <a href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}</a>
+
+          </main>
+          <footer>
+            <button class="swipe-left-button">Swipe Left</button>
+				    <button class="swipe-right-button">Swipe Right</button>
+          </footer>
+        </article>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;

@@ -6,8 +6,6 @@
 (function () {
   const vscode = acquireVsCodeApi();
 
-  nextTheme();
-
   document.querySelector('.swipe-left-button').addEventListener('click', () => {
     swipeLeft();
   });
@@ -22,7 +20,7 @@
     switch (message.type) {
       case 'loadTheme':
         {
-          loadTheme(message.data);
+          //loadTheme(message.data);
           break;
         }
     }
@@ -40,21 +38,5 @@
     vscode.postMessage({ type: 'nextTheme' });
   }
 
-  function loadTheme(theme) {
-    // Get the image of the theme to display
-    // Populate values in the view
-
-    const image = document.getElementById('themeImage');
-    const imageUrl = `https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}`;
-    image.src = imageUrl;
-
-    const imageAnchor = document.getElementById('imageUrl');
-    imageAnchor.href = imageUrl;
-    imageAnchor.innerText = imageUrl;
-
-
-    // colors.push({ value: getNewCalicoColor() });
-    // updateColorList(colors);
-  }
 }());
 
