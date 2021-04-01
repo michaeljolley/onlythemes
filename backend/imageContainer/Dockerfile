@@ -27,15 +27,17 @@ USER $USER
 WORKDIR /home/coder/onlythemes
 
 COPY package*.json .
-RUN npm install
+RUN npm ci
 
 COPY . .
-RUN sudo mkdir -p ~/.config/code-server && \
-    sudo mkdir -p ~/.local/share/code-server/User && \
-    sudo mv ./config.yaml ~/.config/code-server/config.yaml && \
-    sudo mv ./settings.json ~/.local/share/code-server/User/settings.json && \
+RUN mkdir -p ~/.config/code-server && \
+    mkdir -p ~/.local/share/code-server/User && \
+    mv ./config.yaml ~/.config/code-server/config.yaml && \
+    mv ./settings.json ~/.local/share/code-server/User/settings.json && \
+    sudo chown -R $USER:$USER /home/coder/onlythemes && \
     sudo chown -R $USER:$USER /home/coder/.config && \
-    sudo chown -R $USER:$USER /home/coder/.local
+    sudo chown -R $USER:$USER /home/coder/.local && \
+    npm run build:production
 
 RUN code --user-data-dir="/home/$USER/.vscode" && \
     sudo rm /usr/bin/entrypoint.sh && \

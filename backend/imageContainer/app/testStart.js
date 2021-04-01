@@ -27,33 +27,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveTheme = void 0;
 const fs_1 = require("fs");
-const path = __importStar(require("path"));
 const comment_json_1 = require("comment-json");
-const axios_1 = __importDefault(require("axios"));
-const saveTheme = (extensionDir, manifestTheme) => __awaiter(void 0, void 0, void 0, function* () {
-    const colorPath = path.join(`/home/coder/.vscode/extensions/${extensionDir}/`, manifestTheme.path);
-    const themeData = yield fs_1.promises.readFile(colorPath);
-    const rawTheme = comment_json_1.parse(themeData.toString());
-    // format that JSON to match the TypeScript model for Theme
-    const theme = {
-        name: rawTheme.name,
-        colors: rawTheme.colors,
-        tokenColors: rawTheme.tokenColors,
-        semanticHighlighting: rawTheme.semanticHighlighting,
-        extensionId: process.env.EXTENSION
-    };
-    // save that object to CosmosDb
-    return yield _saveTheme(theme);
+const path = __importStar(require("path"));
+const plistParser_1 = require("./vscode/plistParser");
+const themeCapability_1 = require("./vscode/themeCapability");
+const loadManifest = () => __awaiter(void 0, void 0, void 0, function* () {
+    const dir = path.join(path.resolve(), "/test/package.json");
+    const manifestData = yield fs_1.promises.readFile(dir, { encoding: 'utf-8' });
+    return comment_json_1.parse(manifestData);
 });
-exports.saveTheme = saveTheme;
-const _saveTheme = (theme) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield axios_1.default.post(`${process.env.FUNCTIONS_URL}ThemeUpsert`, { theme });
-    return response.data;
+const main = () => __awaiter(void 0, void 0, void 0, function* () {
+    const manifest = yield loadManifest();
+    if (manifest) {
+        for (const manifestTheme of manifest.contributes.themes) {
+            console.log(`Working on '${manifestTheme.label}'`);
+            const themeDataPath = path.join(path.resolve(), "/test", manifestTheme.path);
+            const themeData = yield fs_1.promises.readFile(themeDataPath, { encoding: 'utf-8' });
+            const plist = plistParser_1.parse(themeData);
+            if (path.extname(manifestTheme.path) === '.json') {
+                // do normal color parsing     
+            }
+            else {
+                let settings = plist.settings;
+                if (!Array.isArray(settings)) {
+                    return Promise.reject(new Error("error.plist.invalidformat"));
+                }
+                let result = {
+                    textMateRules: [],
+                    colors: {}
+                };
+                themeCapability_1.convertSettings(settings, result);
+            }
+        }
+    }
 });
-exports.default = exports.saveTheme;
+main();
