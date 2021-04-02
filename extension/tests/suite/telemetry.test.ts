@@ -11,7 +11,7 @@ suite('Telemetry', function () {
       vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders[0];
     const telemetryConfig = vscode.workspace.getConfiguration('telemetry', workspaceFolder);
     const onlyThemesTelemetryConfig = vscode.workspace.getConfiguration(
-      'onlyThemes.telemetry',
+      'onlythemes.telemetry',
       workspaceFolder,
     );
 
