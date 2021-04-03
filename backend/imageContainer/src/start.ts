@@ -49,27 +49,19 @@ const main = async () => {
 
         try {
           await setTheme(manifestTheme.label);
-        }
-        catch (err) {
-          await recordError(`setTheme: ${err}`);
-          throw (err)
-        }
 
-        try {
           const theme = await saveTheme(extensionDir, manifestTheme);
 
-          try {
-            await screenshot(theme.id);
+          const imageCaptured = await screenshot(theme.id);
+
+          if (imageCaptured) {
+            theme.imageCaptured = true;
+            await _saveTheme(theme);
+            console.log(`Saved ${theme.name}`);
           }
-          catch (err) {
-            await recordError(`screenshot: ${err}`);
-            throw (err)
-          }
-  
-          console.log(`Saved ${theme.name}`);
         }
         catch (err) {
-          await recordError(`saveTheme: ${err}`);
+          await recordError(`${err}`);
           throw (err)
         }
       }
@@ -81,6 +73,11 @@ const main = async () => {
     console.log(err);
   }
   await deleteCI();
+}
+
+const _saveTheme = async (theme: any) => {
+  const response = await axios.post(`${process.env.FUNCTIONS_URL}ThemeUpsert`, { theme });
+  return response.data;
 }
 
 main();

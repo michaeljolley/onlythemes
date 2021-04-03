@@ -1,4 +1,4 @@
-import{ promises as fs } from 'fs'
+import { promises as fs } from 'fs'
 import * as path from 'path'
 import { parse } from 'comment-json'
 import axios from 'axios'
@@ -22,9 +22,10 @@ export const saveTheme = async (extensionDir: string, manifestTheme: any) => {
       colors: rawTheme.colors,
       tokenColors: rawTheme.tokenColors,
       semanticHighlighting: rawTheme.semanticHighlighting,
-      extensionId: process.env.EXTENSION
+      extensionId: process.env.EXTENSION,
+      imageCaptured: false
     };
-  
+
     // save that object to CosmosDb
     return await _saveTheme(theme);
   } else { // theme data is a plist of info
@@ -33,9 +34,10 @@ export const saveTheme = async (extensionDir: string, manifestTheme: any) => {
     if (!Array.isArray(settings)) {
       return Promise.reject(new Error("error.plist.invalidFormat"))
     }
-    let result: { textMateRules: ITextMateThemingRule[], colors: IColorMap } = {
+    let result: { textMateRules: ITextMateThemingRule[], colors: IColorMap, imageCaptured: boolean } = {
       textMateRules: [],
-      colors: {}
+      colors: {},
+      imageCaptured: false
     };
     convertSettings(settings, result)
     return await _saveTheme(result)

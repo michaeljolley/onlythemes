@@ -1,7 +1,7 @@
 // const puppeteer = require('puppeteer');
 import * as puppeteer from 'puppeteer';
 
-export const screenshot = async (themeId: string) => {
+export const screenshot = async (themeId: string): Promise<boolean> => {
 
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
@@ -33,6 +33,8 @@ export const screenshot = async (themeId: string) => {
   const screenshot = await page.screenshot({ path: `/images/${themeId}.png`, fullPage: true });
 
   await browser.close();
+
+  return true;
 };
 
 export default screenshot;
