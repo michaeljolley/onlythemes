@@ -5,16 +5,58 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "watch",
-      "problemMatcher": "$tsc-watch",
-      "isBackground": true,
-      "presentation": {
-        "reveal": "never"
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    }
+			"script": "watch",
+			"problemMatcher": [
+        // problemMatcher based on the https://github.com/eamodio/vscode-tsl-problem-matcher problem matchers
+        // updated to include a beginsPattern that works with webpack v5.11+
+        {
+          "owner": "typescript",
+          "source": "ts",
+          "fileLocation": "absolute",
+          "severity": "error",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": {
+              "regexp": "Compiling.*?|Compilation .*?starting|\\d+% building.*|asset.*?"
+            },
+            "endsPattern": {
+              "regexp": "[Cc]ompiled (.*?successfully|with .*?(errors|warnings))|[Cc]ompilation .*?finised"
+            }
+          },
+          "pattern": [
+            {
+              "regexp": "\\[tsl\\] ERROR in (.*)?\\((\\d+),(\\d+)\\)",
+              "severity": 1,
+              "file": 2,
+              "line": 3,
+              "column": 4
+            },
+            {
+              "regexp": "\\s*TS(\\d+):\\s*(.*)$",
+              "code": 1,
+              "message": 2
+            }
+          ]
+        }
+			],
+			"isBackground": true,
+			"presentation": {
+				"reveal": "never"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"type": "npm",
+			"script": "test-watch",
+			"problemMatcher": "$tsc-watch",
+			"isBackground": true,
+			"presentation": {
+				"reveal": "never"
+			},
+			"group": "build"
+		}
   ]
 }

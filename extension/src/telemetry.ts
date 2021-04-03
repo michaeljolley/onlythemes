@@ -174,7 +174,7 @@ export class GoogleAnalyticsTelemetry implements Telemetry {
       .getConfiguration('telemetry')
       .get('enableTelemetry', false);
     const onlyThemesEnableTelemetry = vscode.workspace
-      .getConfiguration('onlyThemes.telemetry')
+      .getConfiguration('onlythemes.telemetry')
       .get('enabled', false);
     return enableTelemetry && onlyThemesEnableTelemetry;
   }
