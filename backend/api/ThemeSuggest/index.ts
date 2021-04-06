@@ -2,6 +2,7 @@ import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { CosmosClient } from "@azure/cosmos";
 
 import { Theme } from "../Models/theme";
+import { Extension } from "../Models/extension";
 
 const endpoint = process.env.cosmosDbEndpoint;
 const key = process.env.cosmosDbKey;
@@ -11,9 +12,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     const userId: string | undefined = req.query.userId;
     let theme: Theme | undefined;
+    let extension: Extension | undefined;
 
     const { database } = await cosmosClient.databases.createIfNotExists({ id: "onlyThemesDb" });
     const { container } = await database.containers.createIfNotExists({ id: "themes" });
+    const extensionContainer = await database.containers.createIfNotExists({ id: "extensions" });
 
     const sprocId = "getRandomTheme";
 
@@ -31,9 +34,18 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     theme = resources[0];
 
+    const extensionResources = await extensionContainer.container.items
+        .query({
+            query: "SELECT * from c WHERE c.extensionId = @extensionId",
+            parameters: [{ name: "@extensionId", value: theme.extensionId }]
+        })
+        .fetchAll();
+
+    extension = extensionResources.resources[0];
+
     context.res = {
         status: theme ? 200 : 404,
-        body: theme
+        body: { theme, extension }
     };
 };
 

@@ -31,13 +31,11 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         case 'swipeLeft':
           {
             // Send left swipe to Azure
-            vscode.window.showInformationMessage('leftSwipe');
             break;
           }
         case 'swipeRight':
           {
             // Send right swipe to Azure
-            vscode.window.showInformationMessage('rightSwipe');
             break;
           }
         case 'nextTheme':
@@ -51,17 +49,29 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     await this.getThemeSuggestion();
   }
 
-  
+  private async doTheDo(): Promise<any> {
+    const response = await fetch(`https://onlythemes.azurewebsites.net/api/ThemeSuggest?userId=abasba`);
+    const { theme, extension } = await response.json();
+    return { theme, extension };
+  }
 
   public async getThemeSuggestion(): Promise<void> {
     if (this._view) {
       try {
-        const response = await fetch(`https://onlythemes.azurewebsites.net/api/ThemeSuggest?userId=abasba`);
-        const theme = await response.json();
+        let theme;
+        let extension;
+
+        // TEMPORARY
+        do {
+          const payload = await this.doTheDo();
+          theme = payload.theme;
+          extension = payload.extension;
+        }
+        while (extension == undefined);
 
         this._view.show?.(true); // `show` is not implemented in 1.49 but is for 1.50 insiders
 
-        this._view.webview.html = this._getHtmlForWebview(theme);
+        this._view.webview.html = this._getHtmlForWebview(theme, extension);
       }
       catch(err) {
         console.error(err);
@@ -69,7 +79,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     }
   }
 
-  private _getHtmlForWebview(theme: any) {
+  private _getHtmlForWebview(theme: any, extension: any) {
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
     const scriptUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
@@ -104,11 +114,10 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
             <h1>${theme.name}</h1>
           </header>
           <main>
-            <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">
-            <h2>Author: Yo mama</h2>
-
-            <a href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}</a>
-
+            <a href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">
+              <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">
+            </a>
+            <h2>Author: ${extension.publisher.displayName}</h2>
           </main>
           <footer>
             <button class="swipe-left-button">Swipe Left</button>

@@ -5,8 +5,8 @@ export class Theme {
     public name: string,
     public colors: Record<string, string>,
     public tokenColors: TokenColor[],
-    public semanticHighlighting: boolean,
     public extensionId: string,
+    public imageCaptured: boolean = false,
     public id?: string
   ) { }
 }

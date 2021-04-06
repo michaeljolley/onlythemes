@@ -18,11 +18,11 @@ export const saveTheme = async (extensionDir: string, manifestTheme: any) => {
 
     // format that JSON to match the TypeScript model for Theme
     const theme = {
-      name: rawTheme.name,
+      name: manifestTheme.label,
       colors: rawTheme.colors,
       tokenColors: rawTheme.tokenColors,
-      semanticHighlighting: rawTheme.semanticHighlighting,
-      extensionId: process.env.EXTENSION,
+      extensionId: process.env.EXTENSION_ID,
+      extensionName: process.env.EXTENSION,
       imageCaptured: false
     };
 
