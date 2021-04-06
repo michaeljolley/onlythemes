@@ -1,5 +1,4 @@
-// const puppeteer = require('puppeteer');
-import * as puppeteer from 'puppeteer';
+const puppeteer = require('puppeteer');
 
 export const screenshot = async (themeId: string): Promise<boolean> => {
 

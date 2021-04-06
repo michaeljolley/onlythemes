@@ -5,7 +5,8 @@
   "main": "app/start.js",
   "scripts": {
     "build:production": "tsc --inlineSourceMap false",
-    "test": "tsc && node ./app/testStart.js"
+    "test": "tsc && node ./app/testStart.js",
+    "start": "node app/start.js"
   },
   "keywords": [],
   "author": "",

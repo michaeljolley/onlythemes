@@ -9,7 +9,7 @@ const cosmosClient = new CosmosClient({ endpoint, key });
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-  const theme: Theme = req.body.theme;
+  let theme: Theme = req.body.theme;
 
   context.log(`ThemeUpsert: ${theme.name}`);
 
@@ -39,6 +39,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
       if (existingTheme) {
         theme.id = existingTheme.id;
+        theme = { ...existingTheme, ...theme };
       }
 
       const { resource } = await container.items.upsert(theme);
