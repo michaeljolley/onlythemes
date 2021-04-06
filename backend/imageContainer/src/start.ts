@@ -20,7 +20,7 @@ const setTheme = async (themeLabel: string) => {
   console.log(themeLabel);
   await fs.writeFile('/home/coder/.local/share/code-server/User/settings.json', `{\
     "workbench.colorTheme": "${themeLabel}",\
-    "editor.fontSize": 30\
+    "window.zoomLevel": 3\
   }`);
 }
 
