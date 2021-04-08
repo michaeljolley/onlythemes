@@ -24,42 +24,29 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
   const { randomTheme } = response.resource;
 
-  if (randomTheme) {
+  // Lookup the themeId in CosmosDb
+  const { resources } = await container.items
+    .query({
+      query: "SELECT * from c WHERE c.id = @themeId",
+      parameters: [{ name: "@themeId", value: randomTheme.id }]
+    })
+    .fetchAll();
 
-    // Lookup the themeId in CosmosDb
-    const { resources } = await container.items
-      .query({
-        query: "SELECT * from c WHERE c.id = @themeId",
-        parameters: [{ name: "@themeId", value: randomTheme.id }]
-      })
-      .fetchAll();
+  theme = resources[0];
 
-    theme = resources[0];
+  const extensionResources = await extensionContainer.container.items
+    .query({
+      query: "SELECT * from c WHERE c.extensionId = @extensionId",
+      parameters: [{ name: "@extensionId", value: theme.extensionId }]
+    })
+    .fetchAll();
 
-    const extensionResources = await extensionContainer.container.items
-      .query({
-        query: "SELECT * from c WHERE c.extensionId = @extensionId",
-        parameters: [{ name: "@extensionId", value: theme.extensionId }]
-      })
-      .fetchAll();
+  extension = extensionResources.resources[0];
 
-    extension = extensionResources.resources[0];
-
-    if (extension) {
-      context.res = {
-        status: 200,
-        body: { theme, extension }
-      };
-    } else {
-      context.res = {
-        status: 404
-      };
-    }
-  } else {
-    context.res = {
-      status: 404
-    };
-  }
+  context.res = {
+    status: theme ? 200 : 404,
+    body: { theme, extension }
+  };
 };
 
 export default httpTrigger;
