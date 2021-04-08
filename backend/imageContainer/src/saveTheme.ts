@@ -19,6 +19,7 @@ export const saveTheme = async (extensionDir: string, manifestTheme: any) => {
     extensionId: process.env.EXTENSION_ID,
     extensionName: process.env.EXTENSION,
     imageCaptured: false,
+    type: manifestTheme.uiTheme || 'vs-light',
     colors: {
       editorBackground: undefined,
       editorForeground: undefined,
