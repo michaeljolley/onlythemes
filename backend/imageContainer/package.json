@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
+    "color2": "^1.0.8",
     "comment-json": "^4.1.0",
     "puppeteer": "^8.0.0"
   },

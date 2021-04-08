@@ -10,43 +10,56 @@ const cosmosClient = new CosmosClient({ endpoint, key });
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    const userId: string | undefined = req.query.userId;
-    let theme: Theme | undefined;
-    let extension: Extension | undefined;
+  const userId: string | undefined = req.query.userId;
+  let theme: Theme | undefined;
+  let extension: Extension | undefined;
 
-    const { database } = await cosmosClient.databases.createIfNotExists({ id: "onlyThemesDb" });
-    const { container } = await database.containers.createIfNotExists({ id: "themes" });
-    const extensionContainer = await database.containers.createIfNotExists({ id: "extensions" });
+  const { database } = await cosmosClient.databases.createIfNotExists({ id: "onlyThemesDb" });
+  const { container } = await database.containers.createIfNotExists({ id: "themes" });
+  const extensionContainer = await database.containers.createIfNotExists({ id: "extensions" });
 
-    const sprocId = "getRandomTheme";
+  const sprocId = "getRandomTheme";
 
-    const response = await container.scripts.storedProcedure(sprocId).execute(undefined);
+  const response = await container.scripts.storedProcedure(sprocId).execute(undefined);
 
-    const { randomTheme } = response.resource;
+  const { randomTheme } = response.resource;
+
+  if (randomTheme) {
 
     // Lookup the themeId in CosmosDb
     const { resources } = await container.items
-        .query({
-            query: "SELECT * from c WHERE c.id = @themeId",
-            parameters: [{ name: "@themeId", value: randomTheme.id }]
-        })
-        .fetchAll();
+      .query({
+        query: "SELECT * from c WHERE c.id = @themeId",
+        parameters: [{ name: "@themeId", value: randomTheme.id }]
+      })
+      .fetchAll();
 
     theme = resources[0];
 
     const extensionResources = await extensionContainer.container.items
-        .query({
-            query: "SELECT * from c WHERE c.extensionId = @extensionId",
-            parameters: [{ name: "@extensionId", value: theme.extensionId }]
-        })
-        .fetchAll();
+      .query({
+        query: "SELECT * from c WHERE c.extensionId = @extensionId",
+        parameters: [{ name: "@extensionId", value: theme.extensionId }]
+      })
+      .fetchAll();
 
     extension = extensionResources.resources[0];
 
-    context.res = {
-        status: theme ? 200 : 404,
+    if (extension) {
+      context.res = {
+        status: 200,
         body: { theme, extension }
+      };
+    } else {
+      context.res = {
+        status: 404
+      };
+    }
+  } else {
+    context.res = {
+      status: 404
     };
+  }
 };
 
 export default httpTrigger;

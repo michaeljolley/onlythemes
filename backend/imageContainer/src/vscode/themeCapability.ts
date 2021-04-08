@@ -4,70 +4,67 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ITextMateThemingRule, IColorMap } from './workbenchThemeService';
-import { Color } from './color';
+const Color = require('color2');
 
-const settingToColorIdMapping: { [settingId: string]: string[] } = {};
-function addSettingMapping(settingId: string, colorId: string) {
-	let colorIds = settingToColorIdMapping[settingId];
-	if (!colorIds) {
-		settingToColorIdMapping[settingId] = colorIds = [];
-	}
-	colorIds.push(colorId);
-}
+export function convertSettings(oldSettings: ITextMateThemingRule[]): any {
 
-export function convertSettings(oldSettings: ITextMateThemingRule[], result: { textMateRules: ITextMateThemingRule[], colors: IColorMap }): void {
-	for (let rule of oldSettings) {
-		result.textMateRules.push(rule);
-		if (!rule.scope) {
-			let settings = rule.settings;
-			if (!settings) {
-				rule.settings = {};
-			} else {
-				for (const settingKey in settings) {
-					const key = <keyof typeof settings>settingKey;
-					let mappings = settingToColorIdMapping[key];
-					if (mappings) {
-						let colorHex = settings[key];
-						if (typeof colorHex === 'string') {
-							let color = Color.fromHex(colorHex);
-							for (let colorId of mappings) {
-								result.colors[colorId] = color;
-							}
-						}
-					}
-					if (key !== 'foreground' && key !== 'background' && key !== 'fontStyle') {
-						delete settings[key];
-					}
-				}
-			}
-		}
-	}
-}
+	// Set a default for background & foreground
+	const defaultBackgroundHex = oldSettings.find(f => !f.scope && f.settings.background)?.settings.background || "#fff";
+	const defaultForegroundHex = oldSettings.find(f => !f.scope && f.settings.foreground)?.settings.foreground || "#000";
 
-addSettingMapping('background', 'editor.background');
-addSettingMapping('foreground', 'editor.foreground');
-addSettingMapping('selection', 'editor.selectionBackground');
-addSettingMapping('inactiveSelection', 'editor.inactiveSelectionBackground');
-addSettingMapping('selectionHighlightColor', 'editor.selectionHighlightBackground');
-addSettingMapping('findMatchHighlight', 'editor.findMatchHighlightBackground');
-addSettingMapping('currentFindMatchHighlight', 'editor.findMatchBackground');
-addSettingMapping('hoverHighlight', 'editor.hoverHighlightBackground');
-addSettingMapping('wordHighlight', 'editor.wordHighlightBackground'); // inlined to avoid editor/contrib dependenies
-addSettingMapping('wordHighlightStrong', 'editor.wordHighlightStrongBackground');
-addSettingMapping('findRangeHighlight', 'editor.findRangeHighlightBackground');
-addSettingMapping('findMatchHighlight', 'peekViewResult.matchHighlightBackground');
-addSettingMapping('referenceHighlight', 'peekViewEditor.matchHighlightBackground');
-addSettingMapping('lineHighlight', 'editor.lineHighlightBackground');
-addSettingMapping('rangeHighlight', 'editor.rangeHighlightBackground');
-addSettingMapping('caret', 'editorCursor.foreground');
-addSettingMapping('invisibles', 'editorWhitespace.foreground');
-addSettingMapping('guide', 'editorIndentGuide.background');
-addSettingMapping('activeGuide', 'editorIndentGuide.activeBackground');
+	const defaultBgColor = new Color(defaultBackgroundHex).toJSON('hsl');
+	const defaultFgColor = new Color(defaultForegroundHex).toJSON('hsl');
 
-const ansiColorMap = ['ansiBlack', 'ansiRed', 'ansiGreen', 'ansiYellow', 'ansiBlue', 'ansiMagenta', 'ansiCyan', 'ansiWhite',
-	'ansiBrightBlack', 'ansiBrightRed', 'ansiBrightGreen', 'ansiBrightYellow', 'ansiBrightBlue', 'ansiBrightMagenta', 'ansiBrightCyan', 'ansiBrightWhite'
-];
+	// Initialize the object we'll return with default values
+	const result = {
+		editorBackground: defaultBgColor,
+		editorForeground: defaultFgColor,
+		foreground: defaultFgColor,
 
-for (const color of ansiColorMap) {
-	addSettingMapping(color, 'terminal.' + color);
+
+		activityBarBackground: defaultBgColor,
+		activityBarForeground: defaultFgColor,
+		sideBarBackground: defaultBgColor,
+		sideBarForeground: defaultFgColor,
+		editorGroupHeaderNoTabsBackground: defaultBgColor,
+		editorGroupHeaderTabsBackground: defaultBgColor,
+		statusBarBackground: defaultBgColor,
+		statusBarForeground: defaultFgColor,
+		titleBarActiveBackground: defaultBgColor,
+		titleBarActiveForeground: defaultFgColor,
+		menuForeground: defaultFgColor,
+		menuBackground: defaultBgColor,
+		terminalBackground: defaultBgColor,
+		terminalForeground: defaultFgColor,
+		buttonBackground: defaultBgColor,
+		buttonForeground: defaultFgColor
+	};
+
+	// Set the values if they are provided in the textmate theme
+	// for (let rule of oldSettings) {
+	// 	if (!rule.scope) {
+	// 		let settings = rule.settings;
+	// 		if (!settings) {
+	// 			rule.settings = {};
+	// 		} else {
+	// 			for (const settingKey in settings) {
+	// 				const key = <keyof typeof settings>settingKey;
+	// 				let mappings = settingToColorIdMapping[key];
+	// 				if (mappings) {
+	// 					let colorHex = settings[key];
+	// 					if (typeof colorHex === 'string') {
+	// 						let color = Color.fromHex(colorHex);
+	// 						for (let colorId of mappings) {
+	// 							result.colors[colorId] = color;
+	// 						}
+	// 					}
+	// 				}
+	// 				if (key !== 'foreground' && key !== 'background' && key !== 'fontStyle') {
+	// 					delete settings[key];
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+	return result;
 }
