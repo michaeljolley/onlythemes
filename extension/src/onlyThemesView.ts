@@ -92,9 +92,6 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
               rating
             })
           });
-
-          this._view.show?.(true); // `show` is not implemented in 1.49 but is for 1.50 insiders
-          this._view.webview.html = this._getHtmlForWebview(theme, extension);
         }
       }
       catch (err) {
