@@ -19,7 +19,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     const themes = resources.map((theme: Theme) => {
         return JSON.stringify({
-            extensionId: theme.extensionId,
             themeId: theme.id,
             type: theme.type,
             editorBackground_H: theme.colors.editorBackground?.h,

@@ -6,7 +6,7 @@
   "main": "./dist/extension",
   "repository": {
     "type": "git",
-    "url": "https://github.com/buildersclub/onlythemes"
+    "url": "https://github.com/builders-club/onlythemes"
   },
   "keywords": [
     "themes"
@@ -17,9 +17,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/buildersclub/onlythemes/issues"
+    "url": "https://github.com/builders-club/onlythemes/issues"
   },
-  "publisher": "michaeljolley",
+  "publisher": "builders-club",
   "icon": "resources/logo.png",
   "preview": false,
   "engines": {
