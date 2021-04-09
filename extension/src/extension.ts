@@ -1,9 +1,6 @@
 import * as vscode from 'vscode';
-import { GoogleAnalyticsTelemetry, LocalTelemetry } from './telemetry';
-import {
-  TelemetryPrompt
-} from './prompts';
 import { OnlyThemesViewProvider } from './onlyThemesView';
+import { Settings } from './settings';
 
 let activeExtension: Extension;
 let _context: vscode.ExtensionContext;
@@ -16,17 +13,9 @@ export class Extension {
   activate = async () => {
 
     /**
-     * Notify user of telemetry collection on first use.
+     * Initialize user object
      */
-    new TelemetryPrompt(_context.globalState).activate();
-
-    /**
-     * Activate telemetry.
-     * Will only collect information if both global telemetry
-     * and OnlyThemes specific telemetry settings are allowed.
-     */
-    const telemetry = getTelemetry();
-    telemetry.sendEvent('Activation', 'activate');
+    await Settings.init(_context.globalState);
 
     /**
      * Register commands & views
@@ -68,18 +57,5 @@ export async function activate(this: any, context: vscode.ExtensionContext) {
 export async function deactivate() {
   if (activeExtension) {
     await activeExtension.deactivate();
-  }
-}
-
-/**
- * Checks for the explicit setting of the EXTENSION_MODE and
- * implicitly checks by using the magic session string. This session value is used whenever an extension
- * is running on a development host. https://github.com/microsoft/vscode/issues/10272
- */
-function getTelemetry() {
-  if (process.env.EXTENSION_MODE === 'development' || vscode.env.sessionId === 'someValue.sessionId') {
-    return new LocalTelemetry();
-  } else {
-    return GoogleAnalyticsTelemetry.getInstance();
   }
 }

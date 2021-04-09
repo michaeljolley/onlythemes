@@ -1,0 +1,31 @@
+name: CD
+
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12"
+      - name: Install dependencies
+        working-directory: ./extension
+        run: |
+          npm install
+      - name: Compile
+        working-directory: ./extension
+        run: |
+          npm run compile
+      - name: Package VSIX
+        working-directory: ./extension
+        run: |
+          npm run package
+      - name: Publish VSIX
+        working-directory: ./extension
+        run: |
+          npx vsce publish --packagePath ./release.vsix --pat ${{ secrets.VSCE_PAT }}

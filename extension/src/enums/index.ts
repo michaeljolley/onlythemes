@@ -1,2 +1,2 @@
-export * from './osType';
-export * from './storageKeys';
+export * from './ratings';
+export * from './settingKeys';
