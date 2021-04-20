@@ -3,7 +3,9 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-VS Code themes that match your personality profile.
+VS Code themes that match your personality profile. Check it out and install via the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=builders-club.onlythemes)
+
+![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/builders-club.onlythemes?style=flat-square) ![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/builders-club.onlythemes?style=flat-square)
 
 ## Contributors ✨
 
