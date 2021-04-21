@@ -1,7 +1,7 @@
 # Only Themes
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 VS Code themes that match your personality profile. Check it out and install via the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=builders-club.onlythemes)
 
@@ -23,6 +23,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://baldbeardedbuilder.com/"><img src="https://avatars.githubusercontent.com/u/1228996?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Michael Jolley</b></sub></a><br /><a href="#ideas-MichaelJolley" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/builders-club/onlythemes/commits?author=MichaelJolley" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/reikoNeko"><img src="https://avatars.githubusercontent.com/u/7728615?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rachel Rawlings</b></sub></a><br /><a href="#ideas-reikoNeko" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/commits?author=parithon" title="Code">💻</a> <a href="https://github.com/builders-club/onlythemes/commits?author=parithon" title="Documentation">📖</a> <a href="#infra-parithon" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://andi1984.dev"><img src="https://avatars.githubusercontent.com/u/1077917?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andreas Sander</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/issues?q=author%3Aandi1984" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

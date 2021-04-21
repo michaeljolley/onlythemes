@@ -53,6 +53,15 @@
         "doc",
         "infra"
       ]
+    },
+    {
+      "login": "andi1984",
+      "name": "Andreas Sander",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1077917?v=4",
+      "profile": "https://andi1984.dev",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
