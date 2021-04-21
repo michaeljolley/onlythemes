@@ -1,7 +1,7 @@
 # Only Themes
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 VS Code themes that match your personality profile. Check it out and install via the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=builders-club.onlythemes)
 
@@ -25,6 +25,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/commits?author=parithon" title="Code">💻</a> <a href="https://github.com/builders-club/onlythemes/commits?author=parithon" title="Documentation">📖</a> <a href="#infra-parithon" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     <td align="center"><a href="https://andi1984.dev"><img src="https://avatars.githubusercontent.com/u/1077917?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andreas Sander</b></sub></a><br /><a href="https://github.com/builders-club/onlythemes/issues?q=author%3Aandi1984" title="Bug reports">🐛</a> <a href="#ideas-andi1984" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://umbertolentini.com"><img src="https://avatars.githubusercontent.com/u/1756971?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Umberto Lentini</b></sub></a><br /><a href="#ideas-ulentini" title="Ideas, Planning, & Feedback">🤔</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/digital-byte"><img src="https://avatars.githubusercontent.com/u/64812398?v=4?s=100" width="100px;" alt=""/><br /><sub><b>digital-byte</b></sub></a><br /><a href="#ideas-digital-byte" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
