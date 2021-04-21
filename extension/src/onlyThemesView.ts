@@ -137,6 +137,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
               <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">
             </a>
             <h2>Author: ${extension.publisher.displayName}</h2>
+            <p><b>Type:</b> ${theme.type === 'vs' ? 'Light' : 'Dark'}</p>
           </main>
           <footer>
             <button class="swipe-left-button">Swipe Left</button>

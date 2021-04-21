@@ -8,9 +8,19 @@ article, main {
 	flex-direction: column;
 }
 
-h1 {
-
+img {
+	border: solid 5px;
 }
+
+h1 {
+	font-size: 3rem;
+}
+
+h2 {
+	font-size: 2rem;
+}
+
+
 
 footer {
 	display: flex;
