@@ -63,6 +63,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "ulentini",
+      "name": "Umberto Lentini",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1756971?v=4",
+      "profile": "http://umbertolentini.com",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
