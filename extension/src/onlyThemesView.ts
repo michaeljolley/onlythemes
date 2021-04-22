@@ -4,23 +4,38 @@ import { Settings } from './settings';
 import { Rating } from './enums';
 import { InstallPrompt } from './installPrompt';
 
+type HSLColor = {
+  h: number;
+  s: number;
+  l: number;
+};
 
+type LIGHT = "Light";
+type DARK = "Dark";
+
+const isDarkTheme = (themeType: string): themeType is DARK =>
+  themeType !== "vs";
 
 export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
-
-  public static readonly viewType = 'onlyThemesView';
+  public static readonly viewType = "onlyThemesView";
   private _view?: vscode.WebviewView;
   private theme: any | undefined;
   private extension: any | undefined;
 
+  private defaultColors: Record<string, Record<string, HSLColor>> = {
+    dark: { bg: { h: 234, s: 26, l: 23 }, color: { h: 0, s: 78, l: 59 } },
+    light: { bg: { h: 34, s: 33, l: 96 }, color: { h: 220, s: 22, l: 35 } },
+  };
+
   constructor(
     private _state: vscode.Memento,
-    private readonly _extensionUri: vscode.Uri) {  }
+    private readonly _extensionUri: vscode.Uri
+  ) {}
 
   public async resolveWebviewView(
     webviewView: vscode.WebviewView,
     context: vscode.WebviewViewResolveContext,
-    _token: vscode.CancellationToken,
+    _token: vscode.CancellationToken
   ) {
     this._view = webviewView;
 
@@ -28,29 +43,23 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
       // Allow scripts in the webview
       enableScripts: true,
 
-      localResourceRoots: [
-        this._extensionUri
-      ]
+      localResourceRoots: [this._extensionUri],
     };
 
     webviewView.webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
-        case 'swipeLeft':
-          {
-            await this.setRanking(Rating.SwipeLeft);
-            break;
-          }
-        case 'swipeRight':
-          {
-            await this.setRanking(Rating.SwipeRight);
-            this.installPrompt();
-
-            break;
-          }
-        case 'nextTheme':
-          {
-            break;
-          }
+        case "swipeLeft": {
+          await this.setRanking(Rating.SwipeLeft);
+          break;
+        }
+        case "swipeRight": {
+          await this.setRanking(Rating.SwipeRight);
+          this.installPrompt();
+          break;
+        }
+        case "nextTheme": {
+          break;
+        }
       }
       await this.getThemeSuggestion();
     });
@@ -65,7 +74,9 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         this.theme = undefined;
 
         if (userId) {
-          const response = await fetch(`https://onlythemes.azurewebsites.net/api/ThemeSuggest?userId=${userId}`);
+          const response = await fetch(
+            `https://onlythemes.azurewebsites.net/api/ThemeSuggest?userId=${userId}`
+          );
           const { theme, extension } = await response.json();
 
           if (theme && extension) {
@@ -76,8 +87,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
             this._view.webview.html = this._getHtmlForWebview(theme, extension);
           }
         }
-      }
-      catch(err) {
+      } catch (err) {
         console.error(err);
       }
     }
@@ -98,8 +108,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
             })
           });
         }
-      }
-      catch (err) {
+      } catch (err) {
         console.error(err);
       }
     }
@@ -109,17 +118,42 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     new InstallPrompt(this._state, this.theme, this.extension).activate();
   }
 
+  private _getHSLCSSDeclaration(hslColorObject: HSLColor) {
+    return `hsl(${hslColorObject.h}, ${hslColorObject.s}%, ${hslColorObject.l}%)`;
+
+  }
+
   private _getHtmlForWebview(theme: any, extension: any) {
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-    const scriptUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+    const scriptUri = this._view?.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "main.js")
+    );
 
     // Do the same for the stylesheet.
-    const styleResetUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
-    const styleVSCodeUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
-    const styleMainUri = this._view?.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+    const styleResetUri = this._view?.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
+    );
+    const styleVSCodeUri = this._view?.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
+    );
+    const styleMainUri = this._view?.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "main.css")
+    );
 
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
+
+    // NOTE: Here we decide which colors we are going to pass to our webview.
+    // TODO: Fix potential A11Y issue that theme colors have insufficient color contrast.
+    const colors =
+      theme?.colors?.editorBackground && theme?.colors?.editorForeground
+        ? {
+            bg: this._getHSLCSSDeclaration(theme?.colors?.editorBackground),
+            color: this._getHSLCSSDeclaration(theme?.colors?.editorForeground),
+          }
+        : isDarkTheme(theme.type)
+        ? this.defaultColors.dark
+        : this.defaultColors.light;
 
     return `<!DOCTYPE html>
 			<html lang="en">
@@ -133,6 +167,12 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 				<link href="${styleResetUri}" rel="stylesheet">
 				<link href="${styleVSCodeUri}" rel="stylesheet">
 				<link href="${styleMainUri}" rel="stylesheet">
+        <style>
+          :root {
+            --theme-bg: ${colors.bg};
+            --theme-color:${colors.color};
+          }
+        </style>
 				
 				<title>Only Themes</title>
 			</head>
@@ -140,13 +180,23 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         <article>
           <header>
             <h1>${theme.name}</h1>
+            <h2>by ${extension.publisher.displayName}</h2>
           </header>
           <main>
-            <a href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">
-              <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${theme.id}">
+            <a class="preview" href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
+              theme.id
+            }">
+              <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
+                theme.id
+              }">
             </a>
-            <h2>Author: ${extension.publisher.displayName}</h2>
-            <p><b>Type:</b> ${theme.type === 'vs' ? 'Light' : 'Dark'}</p>
+            <details open>
+              <summary>Theme Infos</summary>
+              <dl>
+                <dt>Type</dt>
+                <dd>${isDarkTheme(theme.type) ? "Dark" : "Light"}</dd>
+              </dl>
+            </details>
           </main>
           <footer>
             <button class="swipe-left-button">Swipe Left</button>
@@ -160,8 +210,9 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 }
 
 function getNonce() {
-  let text = '';
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let text = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   for (let i = 0; i < 32; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
