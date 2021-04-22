@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import fetch from 'node-fetch';
 import { Settings } from './settings';
 import { Rating } from './enums';
+import { InstallPrompt } from './installPrompt';
 
 
 
@@ -9,7 +10,8 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 
   public static readonly viewType = 'onlyThemesView';
   private _view?: vscode.WebviewView;
-  private themeId: string | undefined;
+  private theme: any | undefined;
+  private extension: any | undefined;
 
   constructor(
     private _state: vscode.Memento,
@@ -41,6 +43,8 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         case 'swipeRight':
           {
             await this.setRanking(Rating.SwipeRight);
+            this.installPrompt();
+
             break;
           }
         case 'nextTheme':
@@ -58,14 +62,15 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     if (this._view) {
       try {
         const userId = await Settings.getUser();
-        this.themeId = undefined;
+        this.theme = undefined;
 
         if (userId) {
           const response = await fetch(`https://onlythemes.azurewebsites.net/api/ThemeSuggest?userId=${userId}`);
           const { theme, extension } = await response.json();
 
           if (theme && extension) {
-            this.themeId = theme.id;
+            this.theme = theme;
+            this.extension = extension;
 
             this._view.show?.(true); // `show` is not implemented in 1.49 but is for 1.50 insiders
             this._view.webview.html = this._getHtmlForWebview(theme, extension);
@@ -83,12 +88,12 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
       try {
         const userId = await Settings.getUser();
 
-        if (userId && this.themeId) {
+        if (userId && this.theme) {
           const response = await fetch(`https://onlythemes.azurewebsites.net/api/RatingUpsert`, {
             method: 'POST',
             body: JSON.stringify({
               userId,
-              themeId: this.themeId,
+              themeId: this.theme.id,
               rating
             })
           });
@@ -98,6 +103,10 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         console.error(err);
       }
     }
+  }
+
+  private installPrompt(): void {
+    new InstallPrompt(this._state, this.theme, this.extension).activate();
   }
 
   private _getHtmlForWebview(theme: any, extension: any) {
