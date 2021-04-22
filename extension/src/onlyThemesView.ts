@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import fetch from "node-fetch";
 import { Settings } from "./settings";
 import { Rating } from "./enums";
+import { getContrast } from "color2k";
 
 type HSLColor = {
   h: number;
@@ -137,13 +138,26 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     const nonce = getNonce();
 
     // NOTE: Here we decide which colors we are going to pass to our webview.
-    // TODO: Fix potential A11Y issue that theme colors have insufficient color contrast.
+
+    const themeColors = {
+      bg: theme?.colors?.editorBackground,
+      color: theme?.colors?.editorForeground,
+    };
+
+    const contrast = getContrast(
+      this._getHSLCSSDeclaration(themeColors.bg),
+      this._getHSLCSSDeclaration(themeColors.color)
+    );
+
+    // We require a color contrast of >=7 as given by the WCAG AAA standard.
+    // cf. https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html
+    const hasEnoughContrast = contrast > 7;
+
     const colors =
-      theme?.colors?.editorBackground && theme?.colors?.editorForeground
-        ? {
-            bg: this._getHSLCSSDeclaration(theme?.colors?.editorBackground),
-            color: this._getHSLCSSDeclaration(theme?.colors?.editorForeground),
-          }
+      theme?.colors?.editorBackground &&
+      theme?.colors?.editorForeground &&
+      hasEnoughContrast
+        ? themeColors
         : isDarkTheme(theme.type)
         ? this.defaultColors.dark
         : this.defaultColors.light;
@@ -162,8 +176,8 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 				<link href="${styleMainUri}" rel="stylesheet">
         <style>
           :root {
-            --theme-bg: ${colors.bg};
-            --theme-color:${colors.color};
+            --theme-bg: ${this._getHSLCSSDeclaration(colors.bg)};
+            --theme-color:${this._getHSLCSSDeclaration(colors.color)};
           }
         </style>
 				

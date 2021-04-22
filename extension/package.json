@@ -88,6 +88,7 @@
     "test": "node ./out/tests/runTest.js"
   },
   "dependencies": {
+    "color2k": "^1.2.4",
     "node-fetch": "^2.6.1",
     "os-name": "^4.0.0",
     "public-ip": "^4.0.3",
