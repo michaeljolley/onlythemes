@@ -3,17 +3,17 @@ import { SettingKeys } from './enums/index';
 
 export class InstallPrompt {
 
-  constructor(private state: vscode.Memento, private theme: any, private extension: any) {
+  constructor(private state: vscode.Memento, private theme: any, private extension: any) { }
 
-  }
+  private installMessage = `Do it!` ;
 
-  public activate(): void {
+  public async activate(): Promise<void> {
     const show = this.shouldShowBanner();
     if (!show) {
       return;
     }
 
-    this.showInstallPrompt();
+    await this.showInstallPrompt();
   }
 
   /**
@@ -28,7 +28,7 @@ export class InstallPrompt {
   }
 
   private async showInstallPrompt(): Promise<void> {
-    const prompts = [`Do it!`];
+    const prompts = [this.installMessage, 'No thanks.'];
 
     const selection = await vscode.window.showInformationMessage(
       "Is this the theme you've been waiting for? Want to install it?",
@@ -39,7 +39,35 @@ export class InstallPrompt {
       return;
     }
 
-    // Install the extension and set theme
+    if (selection === this.installMessage) {
 
+      await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification },
+        (progress) => {
+          progress.report({ message: `Installing ${this.theme.name} theme...` });
+
+          return new Promise((resolve) => {
+            vscode.extensions.onDidChange((e) => resolve(null));
+            vscode.commands.executeCommand("workbench.extensions.installExtension", this.theme.extensionName);
+          });
+        },
+      );
+
+      const themeExtension = vscode.extensions.getExtension(this.theme.extensionName);
+
+      if (themeExtension !== undefined) {
+        const conf = vscode.workspace.getConfiguration();
+        await themeExtension.activate().then(async f => {
+          await conf.update(
+            'workbench.colorTheme',
+            this.theme.name,
+            vscode.ConfigurationTarget.Global
+          );
+          vscode.window.showInformationMessage(
+            `Theme changed to ${this.theme.name}`
+          );
+        });
+      }
+      
+    }
   }
 }

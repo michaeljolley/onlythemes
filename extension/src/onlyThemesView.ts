@@ -54,7 +54,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
         }
         case "swipeRight": {
           await this.setRanking(Rating.SwipeRight);
-          this.installPrompt();
+          await this.installPrompt();
           break;
         }
         case "nextTheme": {
@@ -114,8 +114,9 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     }
   }
 
-  private installPrompt(): void {
-    new InstallPrompt(this._state, this.theme, this.extension).activate();
+  private async installPrompt(): Promise<void> {
+    const installPrompt = new InstallPrompt(this._state, this.theme, this.extension);
+    await installPrompt.activate();
   }
 
   private _getHSLCSSDeclaration(hslColorObject: HSLColor) {
