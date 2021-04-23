@@ -28,7 +28,7 @@ export class InstallPrompt {
   }
 
   private async showInstallPrompt(): Promise<void> {
-    const prompts = [this.installMessage, 'No thanks.'];
+    const prompts = [this.installMessage, 'No thanks'];
 
     const selection = await vscode.window.showInformationMessage(
       "Is this the theme you've been waiting for? Want to install it?",

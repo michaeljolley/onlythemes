@@ -28,6 +28,12 @@ article {
   padding: 0.1rem;
 }
 
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 article,
 main {
   display: flex;
@@ -39,11 +45,11 @@ img {
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 header,
