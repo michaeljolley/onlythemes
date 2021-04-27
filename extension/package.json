@@ -21,7 +21,7 @@
   },
   "publisher": "builders-club",
   "icon": "resources/logo.png",
-  "preview": false,
+  "preview": true,
   "engines": {
     "vscode": "^1.53.0"
   },
