@@ -100,6 +100,16 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "ibaldie",
+      "name": "Liam Baldwin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3380651?v=4",
+      "profile": "https://github.com/iBaldie",
+      "contributions": [
+        "design",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
