@@ -13,6 +13,8 @@ type HSLColor = {
 type LIGHT = "Light";
 type DARK = "Dark";
 
+const colorPrefixes = ['editor', 'sideBar', 'activityBar', 'titleBarActive'];
+
 const isDarkTheme = (themeType: string): themeType is DARK =>
   themeType !== "vs";
 
@@ -121,7 +123,19 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 
   private _getHSLCSSDeclaration(hslColorObject: HSLColor) {
     return `hsl(${hslColorObject.h}, ${hslColorObject.s}%, ${hslColorObject.l}%)`;
+  }
 
+  private _getColorPair(group: string): string {
+    if (this.theme && this.theme.colors) {
+      if (this.theme.colors[`${group}Background`] &&
+      this.theme.colors[`${group}Foreground`]) {
+        return `<dl>
+          <dt style="background-color:${this._getHSLCSSDeclaration(this.theme.colors[`${group}Background`])}"></dt>
+          <dd style="background-color:${this._getHSLCSSDeclaration(this.theme.colors[`${group}Foreground`])}"></dd>
+        </dl>`;
+      }
+    }
+    return '';
   }
 
   private _getHtmlForWebview(theme: any, extension: any) {
@@ -144,18 +158,8 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
 
-    // NOTE: Here we decide which colors we are going to pass to our webview.
-    // TODO: Fix potential A11Y issue that theme colors have insufficient color contrast.
-    const colors =
-      theme?.colors?.editorBackground && theme?.colors?.editorForeground
-        ? {
-            bg: this._getHSLCSSDeclaration(theme?.colors?.editorBackground),
-            color: this._getHSLCSSDeclaration(theme?.colors?.editorForeground),
-          }
-        : isDarkTheme(theme.type)
-        ? this.defaultColors.dark
-        : this.defaultColors.light;
-
+    const colorPalette = colorPrefixes.map(p => this._getColorPair(p)).join('\n');
+    
     return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
@@ -168,13 +172,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 				<link href="${styleResetUri}" rel="stylesheet">
 				<link href="${styleVSCodeUri}" rel="stylesheet">
 				<link href="${styleMainUri}" rel="stylesheet">
-        <style>
-          :root {
-            --theme-bg: ${colors.bg};
-            --theme-color:${colors.color};
-          }
-        </style>
-				
+        
 				<title>Only Themes</title>
 			</head>
 			<body>
@@ -184,24 +182,22 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
             <h2>by ${extension.publisher.displayName}</h2>
           </header>
           <main>
-            <a class="preview" href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
+            <a
+              title="Click to zoom in"
+              href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
               theme.id
             }">
               <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
                 theme.id
               }">
             </a>
-            <details open>
-              <summary>Theme Infos</summary>
-              <dl>
-                <dt>Type</dt>
-                <dd>${isDarkTheme(theme.type) ? "Dark" : "Light"}</dd>
-              </dl>
-            </details>
+            <section>
+              
+            </section>
           </main>
           <footer>
             <button class="swipe-left-button">Swipe Left</button>
-				    <button class="swipe-right-button">Swipe Right</button>
+            <button class="swipe-right-button">Swipe Right</button>
           </footer>
         </article>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
@@ -209,6 +205,18 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 			</html>`;
   }
 }
+
+//  <section>
+//     <h2>Extension Info</h2>
+//     <dl>
+//       <dt>Extension</dt>
+//       <dd>
+//         <a href="https://marketplace.visualstudio.com/items?itemName=${theme.extensionName}">${extension.displayName}</a>
+//       </dd>
+//       <dt>Type</dt>
+//       <dd>${isDarkTheme(theme.type) ? "Dark" : "Light"}</dd>
+//     </dl>
+//   </section>
 
 function getNonce() {
   let text = "";

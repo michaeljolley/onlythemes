@@ -1,93 +1,88 @@
+:root {
+  --blue: #44484A;
+  --gray: #B3B7B9;
+}
+
 body {
-  margin: 0;
-  color: var(--theme-color);
-  background-color: var(--theme-bg);
+  margin: 1rem;
+  background-color: rgba(0,0,0,.15);
 }
 
-button,
-button:focus,
-button:hover {
-  color: var(--theme-bg);
-  background-color: var(--theme-color);
-}
-
-button:focus,
-button:hover {
-  text-decoration: underline;
-}
-
-/* 
- * Alignment:
- * x-axis: center
- * y-axis: space between
- */
 article {
-  justify-content: flex-start;
-  align-items: center;
-  min-height: 100vh;
-  padding: 0.1rem;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 3px 16px rgba(0, 0, 0, 0.25);
 }
 
 header {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-}
-
-article,
-main {
-  display: flex;
-  flex-direction: column;
-}
-
-img {
-  border: solid 5px var(--theme-color);
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--blue);
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--gray);
 }
 
-header,
-.preview,
-details {
-  margin-bottom: 1rem;
+img {
+  box-shadow: 0px ​5px 5px rgb(0 0 0 / 25%);
+  border-radius: 1rem;
 }
 
 footer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: stretch;
   gap: 0.5rem 0;
   width: 100%;
   height: auto;
 }
 
-@media screen and (min-width: 500px) {
-  article {
-    padding: 0.5rem;
-    justify-content: space-evenly;
+section {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+}
+
+dt, dd {
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 0.4rem;
+  margin: 0px;
+  box-shadow: 0px 1px 4px rgb(0 0 0 / 25%);
+}
+
+dd {
+  position: relative;
+  top: -.8rem;
+  left: .7rem;
+}
+
+header,
+img,
+section,
+main {
+  margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 400px) {
+    
+  h1 {
+    font-size: 1.5rem;
   }
 
-  footer {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0 1rem;
-  }
-
-  header,
-  footer {
-    max-height: 10vh;
-  }
-
-  main {
-    max-height: 80vh;
-    overflow-y: scroll;
+  h2 {
+    font-size: 1rem;
   }
 }
