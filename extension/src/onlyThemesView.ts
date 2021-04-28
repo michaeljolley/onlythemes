@@ -15,19 +15,11 @@ type DARK = "Dark";
 
 const colorPrefixes = ['editor', 'sideBar', 'activityBar', 'titleBarActive'];
 
-const isDarkTheme = (themeType: string): themeType is DARK =>
-  themeType !== "vs";
-
 export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "onlyThemesView";
   private _view?: vscode.WebviewView;
   private theme: any | undefined;
   private extension: any | undefined;
-
-  private defaultColors: Record<string, Record<string, HSLColor>> = {
-    dark: { bg: { h: 234, s: 26, l: 23 }, color: { h: 0, s: 78, l: 59 } },
-    light: { bg: { h: 34, s: 33, l: 96 }, color: { h: 220, s: 22, l: 35 } },
-  };
 
   constructor(
     private _state: vscode.Memento,
@@ -155,6 +147,14 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
       vscode.Uri.joinPath(this._extensionUri, "media", "main.css")
     );
 
+    // Do the same for the thumb icons
+    const thumbsUpUri = this._view?.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "thumbs-up.svg")
+    );
+    const thumbsDownUri = this._view?.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "thumbs-down.svg")
+    );
+
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
 
@@ -192,14 +192,20 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
               }">
             </a>
             <section>
-              
+              <div class="mode ${theme.type}"></div>
+              <a class="link" href="https://marketplace.visualstudio.com/items?itemName=${theme.extensionName}"></a>
             </section>
           </main>
-          <footer>
-            <button class="swipe-left-button">Swipe Left</button>
-            <button class="swipe-right-button">Swipe Right</button>
-          </footer>
         </article>
+        <footer>
+          <button class="swipe-left-button" title="Not interested">
+            <img src="${thumbsDownUri}"/>
+          </button>
+          <a class="repo" href="https://bbb.dev/onlythemes" title="See the code"></a>
+          <button class="swipe-right-button" title="I like it!">
+            <img src="${thumbsUpUri}"/>
+          </button>
+        </footer>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
@@ -211,7 +217,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 //     <dl>
 //       <dt>Extension</dt>
 //       <dd>
-//         <a href="https://marketplace.visualstudio.com/items?itemName=${theme.extensionName}">${extension.displayName}</a>
+//         
 //       </dd>
 //       <dt>Type</dt>
 //       <dd>${isDarkTheme(theme.type) ? "Dark" : "Light"}</dd>

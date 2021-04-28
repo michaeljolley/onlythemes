@@ -1,11 +1,12 @@
 :root {
   --blue: #44484A;
   --gray: #B3B7B9;
+  --dark-gray: #656F73;
 }
 
 body {
   margin: 1rem;
-  background-color: rgba(0,0,0,.15);
+  background-color: #2A3037;
 }
 
 article {
@@ -15,7 +16,7 @@ article {
   padding: 1.3rem;
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 3px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.25);
 }
 
 header {
@@ -36,23 +37,70 @@ h2 {
 }
 
 img {
-  box-shadow: 0px ​5px 5px rgb(0 0 0 / 25%);
+  box-shadow: 0px 5px 5px rgb(0 0 0 / 25%);
   border-radius: 1rem;
 }
 
 footer {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.5rem 0;
-  width: 100%;
-  height: auto;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+footer img {
+  box-shadow: none;
+  border-radius: unset;
+  color: white;
+}
+
+footer button {
+  box-shadow: 0px 5px 5px rgb(0 0 0 / 25%);
+}
+
+footer button, footer a {
+  height: 5rem;
+  width: 5rem;
 }
 
 section {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+.mode, .link, .repo {
+  color: var(--blue);
+  height: 3rem;
+  width: 3rem;
+}
+
+.vs {
+  background: url('./light.svg') no-repeat;
+}
+
+.vs-dark {
+  background: url('./dark.svg') no-repeat;
+}
+
+.link {
+  background: url('./link.svg') no-repeat;
+}
+
+.repo {
+  background: url('./bbb.svg') no-repeat;
+  color: white;
+}
+
+.swipe-left-button, .swipe-right-button {
+  border-radius: 2.5rem;
+  box-shadow: 0px 5px 5px rgb(0 0 0 / 25%);
+  background-color: var(--dark-gray);
+  color: white;
+}
+
+.vs, .vs-dark, .link, .repo {
+  background-size: contain;
 }
 
 dt, dd {
@@ -69,9 +117,9 @@ dd {
   left: .7rem;
 }
 
+article,
 header,
 img,
-section,
 main {
   margin-bottom: 1rem;
 }
