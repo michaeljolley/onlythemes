@@ -1,0 +1,172 @@
+:root {
+  --blue: #44484A;
+  --gray: #B3B7B9;
+  --dark-gray: #656F73;
+}
+
+body {
+  margin: 3rem;
+  background-color: #2A3037;
+  padding: 0;
+}
+
+article {
+  height: 100%;
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 10px 8px rgb(0 0 0 / 40%);
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--blue);
+}
+
+h2 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--gray);
+}
+
+main > a {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 4px 10px 0px rgb(0 0 0 / 25%);
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  outline: none;
+}
+
+img {
+  border-radius: 1rem;
+  outline: none;
+}
+
+.expand {
+  background-color: #fff;
+}
+
+.expand img {
+  height: 2rem;
+  width: 2rem;
+  border-radius: unset;
+  box-shadow: none;
+}
+
+a, img{
+  outline: none;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+footer img {
+  box-shadow: none;
+  border-radius: unset;
+  height: 2.5rem;
+  margin: 0;
+}
+
+footer button {
+  box-shadow: 0px 5px 5px rgb(0 0 0 / 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+footer button, footer a {
+  height: 4rem;
+  width: 4rem;
+}
+
+section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mode, .link, .repo {
+  color: var(--blue);
+  height: 3rem;
+  width: 3rem;
+}
+
+.vs {
+  background: url('./light.svg') no-repeat;
+}
+
+.vs-dark, .hc-black {
+  background: url('./dark.svg') no-repeat;
+}
+
+.link {
+  background: url('./link.svg') no-repeat;
+}
+
+.repo {
+  background: url('./bbb.svg') no-repeat;
+}
+
+.swipe-left-button, .swipe-right-button {
+  border-radius: 2.5rem;
+  box-shadow: 0px 3px 8px rgb(0 0 0 / 25%);
+  background-color: var(--dark-gray);
+}
+
+.swipe-left-button:hover,
+.swipe-left-button:active,
+.swipe-right-button:hover,
+.swipe-right-button:active {
+  background: linear-gradient(
+		90deg,
+		rgba(255, 0, 255, 1) 0%,
+		rgba(0, 255, 255, 1) 100%
+	);
+}
+
+.vs, .vs-dark, .hc-black, .link, .repo {
+  background-size: contain;
+}
+
+dt, dd {
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 0.4rem;
+  margin: 0px;
+  box-shadow: 0px 1px 4px rgb(0 0 0 / 25%);
+}
+
+dd {
+  position: relative;
+  top: -.8rem;
+  left: .7rem;
+}
+
+article,
+header {
+  margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 400px) {
+    
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+}

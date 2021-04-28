@@ -37,7 +37,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:onlyThemesView"
+    "onView:onlyThemesView",
+    "onView:thumbnailView"
   ],
   "contributes": {
     "configuration": {
@@ -51,18 +52,17 @@
         }
       }
     },
-    "commands": [
-      {
-        "category": "OnlyThemes",
-        "command": "onlyThemes.getThemeSuggestion",
-        "title": "Get Theme Suggestion"
-      }
-    ],
+    "commands": [],
     "views": {
       "onlyThemes": [
         {
           "type": "webview",
           "id": "onlyThemesView",
+          "name": "Only Themes"
+        },
+        {
+          "type": "webview",
+          "id": "thumbnailView",
           "name": "Only Themes"
         }
       ]

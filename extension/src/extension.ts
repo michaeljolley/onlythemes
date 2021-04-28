@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { OnlyThemesViewProvider } from './onlyThemesView';
 import { Settings } from './settings';
+import { ThumbnailViewProvider } from './thumbnailView';
 
 let activeExtension: Extension;
 let _context: vscode.ExtensionContext;
@@ -21,6 +22,7 @@ export class Extension {
      * Register commands & views
      */
     const onlyThemesViewProvider = new OnlyThemesViewProvider(_context.globalState, _context.extensionUri);
+    const thumbnailViewProvider = new ThumbnailViewProvider(_context.globalState, _context.extensionUri);
 
     _context.subscriptions.push(
       vscode.commands.registerCommand('onlyThemes.getThemeSuggestion', () => {
