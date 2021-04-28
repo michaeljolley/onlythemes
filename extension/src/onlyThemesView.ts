@@ -41,21 +41,27 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     };
 
     webviewView.webview.onDidReceiveMessage(async (data) => {
-      switch (data.type) {
-        case "swipeLeft": {
-          await this.setRanking(Rating.SwipeLeft);
-          break;
-        }
-        case "swipeRight": {
-          await this.setRanking(Rating.SwipeRight);
-          await this.installPrompt();
-          break;
-        }
-        case "nextTheme": {
-          break;
-        }
-      }
-      await this.getThemeSuggestion();
+
+        await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification },
+        async (progress) => {
+
+          switch (data.type) {
+            case "swipeLeft": {
+              await this.setRanking(Rating.SwipeLeft);
+              break;
+            }
+            case "swipeRight": {
+              await this.setRanking(Rating.SwipeRight);
+              await this.installPrompt();
+              break;
+            }
+            case "nextTheme": {
+              break;
+            }
+          }
+          await this.getThemeSuggestion();
+        },
+      );
     });
 
     await this.getThemeSuggestion();
@@ -154,6 +160,9 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
     const thumbsDownUri = this._view?.webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "media", "thumbs-down.svg")
     );
+    const arrowExpandUri = this._view?.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "arrows-angle-expand.svg")
+    );
 
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
@@ -183,7 +192,7 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
           </header>
           <main>
             <a
-              title="Click to zoom in"
+              title="Click to expand"
               href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
               theme.id
             }">
@@ -193,7 +202,9 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
             </a>
             <section>
               <div class="mode ${theme.type}"></div>
-              <a class="link" href="https://marketplace.visualstudio.com/items?itemName=${theme.extensionName}"></a>
+              <a class="link" 
+                title="View extension on the marketplace"
+                href="https://marketplace.visualstudio.com/items?itemName=${theme.extensionName}"></a>
             </section>
           </main>
         </article>
@@ -211,18 +222,6 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
 			</html>`;
   }
 }
-
-//  <section>
-//     <h2>Extension Info</h2>
-//     <dl>
-//       <dt>Extension</dt>
-//       <dd>
-//         
-//       </dd>
-//       <dt>Type</dt>
-//       <dd>${isDarkTheme(theme.type) ? "Dark" : "Light"}</dd>
-//     </dl>
-//   </section>
 
 function getNonce() {
   let text = "";
