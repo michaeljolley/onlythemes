@@ -1,7 +1,7 @@
 # Only Themes
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 VS Code themes that match your personality profile. Check it out and install via the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=builders-club.onlythemes)
 
@@ -31,6 +31,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://c-j.tech"><img src="https://avatars.githubusercontent.com/u/3969086?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chris Jones</b></sub></a><br /><a href="#ideas-cmjchrisjones" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/MaryJoStaebler"><img src="https://avatars.githubusercontent.com/u/48457743?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mary Jo</b></sub></a><br /><a href="#ideas-MaryJoStaebler" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/iBaldie"><img src="https://avatars.githubusercontent.com/u/3380651?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Liam Baldwin</b></sub></a><br /><a href="#design-ibaldie" title="Design">🎨</a> <a href="#ideas-ibaldie" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://brianretterer.com"><img src="https://avatars.githubusercontent.com/u/1906920?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brian Retterer</b></sub></a><br /><a href="#ideas-bretterer" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
