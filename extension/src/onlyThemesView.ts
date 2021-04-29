@@ -48,18 +48,23 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
           switch (data.type) {
             case "swipeLeft": {
               await this.setRanking(Rating.SwipeLeft);
+              await this.getThemeSuggestion();
               break;
             }
             case "swipeRight": {
               await this.setRanking(Rating.SwipeRight);
               await this.installPrompt();
+              await this.getThemeSuggestion();
+              break;
+            }
+            case "preview": {
+              await vscode.commands.executeCommand('onlyThemes.loadPreview', this.theme, this.extension);
               break;
             }
             case "nextTheme": {
               break;
             }
           }
-          await this.getThemeSuggestion();
         },
       );
     });
@@ -193,9 +198,8 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
           <main>
             <a
               title="Click to expand"
-              href="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
-              theme.id
-            }">
+              id="preview"
+              href="#">
               <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
                 theme.id
               }">

@@ -1,7 +1,7 @@
 {
   "name": "onlythemes",
   "displayName": "Only Themes",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "Find that special theme you've been looking for.",
   "main": "./dist/extension",
   "repository": {
@@ -21,7 +21,7 @@
   },
   "publisher": "builders-club",
   "icon": "resources/logo.png",
-  "preview": true,
+  "preview": false,
   "engines": {
     "vscode": "^1.53.0"
   },
@@ -58,11 +58,6 @@
         {
           "type": "webview",
           "id": "onlyThemesView",
-          "name": "Only Themes"
-        },
-        {
-          "type": "webview",
-          "id": "thumbnailView",
           "name": "Only Themes"
         }
       ]

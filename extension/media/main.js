@@ -14,6 +14,10 @@
     swipeRight();
   });
 
+  document.querySelector('#preview').addEventListener('click', (event) => {
+    previewTheme(event);
+  });
+
   // Handle messages sent from the extension to the webview
   window.addEventListener('message', event => {
     const message = event.data; // The json data that the extension sent
@@ -34,8 +38,9 @@
     vscode.postMessage({ type: 'swipeRight' });
   }
 
-  function nextTheme() {
-    vscode.postMessage({ type: 'nextTheme' });
+  function previewTheme(e) {
+    e.preventDefault();
+    vscode.postMessage({ type: 'preview' });
   }
 
 }());
