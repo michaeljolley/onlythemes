@@ -56,7 +56,8 @@
     "commands": [
       {
         "command":"onlythemes.forgetMe",
-        "title":"Forget My Ratings"
+        "title":"Forget My Ratings",
+        "category":"OnlyThemes"
       }
     ],
     "views": {

@@ -42,6 +42,12 @@ Maybe this is the theme you've been dreaming of! Click the "thumbs up" icon
 to let us know you like it. We'll even offer to install the theme and activate
 it for you.
 
+### 🔥 I want to start over
+
+If you'd like to just start completely over so that all of your previous ratings
+are thrown out, try using the Command Palette (Cmd + Shift + P), and choose "Forget My Ratings".
+This will confirm you want to do it, and will start you from scratch.
+
 ### 💻 How does it work?
 
 Want to see the code? Click the Bald Bearded Builder logo to see the repo. We
