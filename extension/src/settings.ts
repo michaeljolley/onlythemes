@@ -21,4 +21,9 @@ export class Settings {
   public static async getUser(): Promise<string | null | undefined> {
     return await this.storage.get(SettingKeys.userId);
   }
+  
+  public static async resetUser(): Promise<void> {
+    const newUserId = v4();
+    await this.storage.update(SettingKeys.userId, newUserId);
+  }
 }
