@@ -53,10 +53,6 @@ export class InstallPrompt {
           },
         );
         themeExtension = vscode.extensions.getExtension(this.theme.extensionName);  
-      } else {
-        vscode.window.showInformationMessage(
-          `Theme extension ${this.theme.name} already installed.`
-        );
       }
 
 
