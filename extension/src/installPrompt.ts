@@ -40,19 +40,25 @@ export class InstallPrompt {
     }
 
     if (selection === this.installMessage) {
+      let themeExtension = vscode.extensions.getExtension(this.theme.extensionName);
+      if(themeExtension == undefined){
+        await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification },
+          (progress) => {
+            progress.report({ message: `Installing ${this.theme.name} theme...` });
+  
+            return new Promise((resolve) => {
+              vscode.extensions.onDidChange((e) => resolve(null));
+              vscode.commands.executeCommand("workbench.extensions.installExtension", this.theme.extensionName);
+            });
+          },
+        );
+        themeExtension = vscode.extensions.getExtension(this.theme.extensionName);  
+      } else {
+        vscode.window.showInformationMessage(
+          `Theme extension ${this.theme.name} already installed.`
+        );
+      }
 
-      await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification },
-        (progress) => {
-          progress.report({ message: `Installing ${this.theme.name} theme...` });
-
-          return new Promise((resolve) => {
-            vscode.extensions.onDidChange((e) => resolve(null));
-            vscode.commands.executeCommand("workbench.extensions.installExtension", this.theme.extensionName);
-          });
-        },
-      );
-
-      const themeExtension = vscode.extensions.getExtension(this.theme.extensionName);
 
       if (themeExtension !== undefined) {
         const conf = vscode.workspace.getConfiguration();
