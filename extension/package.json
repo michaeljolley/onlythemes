@@ -38,7 +38,8 @@
   ],
   "activationEvents": [
     "onView:onlyThemesView",
-    "onView:thumbnailView"
+    "onView:thumbnailView",
+    "onCommand:onlythemes.forgetMe"
   ],
   "contributes": {
     "configuration": {
@@ -52,7 +53,13 @@
         }
       }
     },
-    "commands": [],
+    "commands": [
+      {
+        "command":"onlythemes.forgetMe",
+        "title":"Forget My Ratings",
+        "category":"OnlyThemes"
+      }
+    ],
     "views": {
       "onlyThemes": [
         {

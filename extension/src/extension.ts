@@ -34,6 +34,19 @@ export class Extension {
 
     _context.subscriptions.push(
       vscode.window.registerWebviewViewProvider(OnlyThemesViewProvider.viewType, onlyThemesViewProvider));
+    _context.subscriptions.push(
+      vscode.commands.registerCommand("onlythemes.forgetMe", async () => {
+        const forgetMeSelection = 'Yes';
+        const prompts = [forgetMeSelection, 'No'];
+
+        const selection = await vscode.window.showInformationMessage(
+          "This will reset all of your OnlyThemes ratings, but it will not affect any of your installed extensions. Are you sure you want to do this?",
+          ...prompts
+        );
+        if(selection == forgetMeSelection){
+          Settings.resetUser();
+        }
+      }));
   }
 
   /**
