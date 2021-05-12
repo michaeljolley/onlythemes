@@ -1,7 +1,7 @@
 {
   "name": "onlythemes",
   "displayName": "Only Themes",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Find that special theme you've been looking for.",
   "main": "./dist/extension",
   "repository": {
@@ -55,9 +55,9 @@
     },
     "commands": [
       {
-        "command":"onlythemes.forgetMe",
-        "title":"Forget My Ratings",
-        "category":"OnlyThemes"
+        "command": "onlythemes.forgetMe",
+        "title": "Forget My Ratings",
+        "category": "OnlyThemes"
       }
     ],
     "views": {
