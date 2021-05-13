@@ -196,13 +196,13 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
             <h2>by ${extension.publisher.displayName}</h2>
           </header>
           <main>
-            <a
-              title="Click to expand"
+            <a title="Click to expand"
               id="preview"
               href="#">
-              <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
-                theme.id
-              }">
+              <div id="thmImgHolder" class="loadingImage">
+                <img id="thmImg"  src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
+                  theme.id}">
+              </div>
             </a>
             <section>
               <div class="mode ${theme.type}"></div>
@@ -218,10 +218,17 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
           </button>
           <a class="repo" href="https://bbb.dev/onlythemes" title="See the code"></a>
           <button class="swipe-right-button" title="I like it!">
-            <img src="${thumbsUpUri}"/>
+              <img src="${thumbsUpUri}"/>
           </button>
         </footer>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
+        <script>
+          document.querySelector('#thmImg').addEventListener('load', () => {
+            document.querySelector('.loadingImage').classList.toggle("loadingImage");
+            document.querySelector('.swipe-left-button').style.cursor = "pointer";
+            document.querySelector('.swipe-right-button').style.cursor = "pointer";
+          })
+        </script>
 			</body>
 			</html>`;
   }
