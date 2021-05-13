@@ -127,14 +127,12 @@ section {
 }
 
 .swipe-left-button:hover,
-.swipe-left-button:active,
+.swipe-left-button:active{
+  background-color: #EA41F7;
+}
 .swipe-right-button:hover,
 .swipe-right-button:active {
-  background: linear-gradient(
-		90deg,
-		rgba(255, 0, 255, 1) 0%,
-		rgba(0, 255, 255, 1) 100%
-	);
+  background-color: #65D5FA;
 }
 
 .vs, .vs-dark, .hc-black, .link, .repo {
@@ -169,4 +167,41 @@ header {
   h2 {
     font-size: 1rem;
   }
+}
+#thmImg{
+  display: inline-block;
+}
+.loadingImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px 7px;
+  background: linear-gradient(90deg,
+     #EA41F7 0%,
+     #812FED 29.69%,
+     #4E4FFF 48.96%,
+     #5786FD 69.27%,
+     #65D5FA 100%);
+  border-radius: 1rem;
+  z-index: 1;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+  opacity: 0.45;
+}
+@keyframes animatedgradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    25% {
+        background-position: 100% 50%;
+    }
+    50% {
+        background-position: 100% 500%;
+    }
+    75% {
+        background-position: 50% 100%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
 }
