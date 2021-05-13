@@ -8,10 +8,12 @@
 
   document.querySelector('.swipe-left-button').addEventListener('click', () => {
     swipeLeft();
+    displayLoadingStyle();
   });
 
   document.querySelector('.swipe-right-button').addEventListener('click', () => {
     swipeRight();
+    displayLoadingStyle();
   });
 
   document.querySelector('#preview').addEventListener('click', (event) => {
@@ -29,6 +31,12 @@
         }
     }
   });
+
+  function displayLoadingStyle(){
+    document.querySelector('#thmImgHolder').classList.toggle("loadingImage");
+    document.querySelector('.swipe-left-button').style.cursor = "not-allowed";
+    document.querySelector('.swipe-right-button').style.cursor = "not-allowed";
+  }
 
   function swipeLeft() {
     vscode.postMessage({ type: 'swipeLeft' });
