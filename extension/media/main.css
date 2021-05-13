@@ -119,6 +119,9 @@ section {
 .repo {
   background: url('./bbb.svg') no-repeat;
 }
+.repo:hover {
+  background: url('./bbb-hov.svg') no-repeat;
+}
 
 .swipe-left-button, .swipe-right-button {
   border-radius: 2.5rem;
