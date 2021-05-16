@@ -53,3 +53,9 @@
 
 }());
 
+//set mouse to pointer, and toogle the class to not/show the loading gradient
+document.querySelector('#thmImg').addEventListener('load', () => {
+  document.querySelector('.loadingImage').classList.toggle("loadingImage");
+  document.querySelector('.swipe-left-button').style.cursor = "pointer";
+  document.querySelector('.swipe-right-button').style.cursor = "pointer";
+})
