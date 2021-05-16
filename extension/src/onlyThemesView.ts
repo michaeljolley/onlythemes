@@ -216,21 +216,71 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
           <button class="swipe-left-button" title="Not interested">
             <img src="${thumbsDownUri}"/>
           </button>
-          <a class="repo" href="https://bbb.dev/onlythemes" title="See the code"></a>
+          <a class="repo" href="https://bbb.dev/onlythemes" title="See the code">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" id="git_logo">
+              <defs>
+                <style>
+                  #git_logo {
+                    fill: #ffffff;
+                  }
+                  #git_logo:hover{
+                    fill:url(#paint1);
+                  }
+                </style>
+                <linearGradient id="paint1" gradientTransform="rotate(90)">
+                        <stop offset="0" stop-color="#fff">
+                    <animate attributeName="offset" dur="2s" values="0;1;0" repeatCount="indefinite"/>
+                  </stop>
+                  <stop offset="0.21" stop-color="#EA41F7">
+                    <animate attributeName="offset" dur="2s" values="0.21;1;0.21" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="0.39" stop-color="#812FED">
+                    <animate attributeName="offset" dur="2s" values="0.39;1;0.39" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="0.69" stop-color="#4E4FFF">
+                    <animate attributeName="offset" dur="2s" values="0.69;1;0.69" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="0.85" stop-color="#5786FD">
+                    <animate attributeName="offset" dur="2s" values="0.85;1;0.85" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="1" stop-color="#65D5FA">
+                    <animate attributeName="offset" dur="2s" values="1;1;1" repeatCount="indefinite" />
+                  </stop>
+                </linearGradient> 
+              </defs>
+              <g>
+                <path 
+                  d="M426.26 384.69v35.8c0 8.22-2.44 30.86-7.31 33.94s-12.71 4.62-23.49 
+                  4.62h-2.61V420.3q0-19.89-8.62-27.52t-25-7.62h-32.68q-9.06 
+                  0-13.81-2.87t-4.74-9.73v-3.93h-21.23v3.93q0 6.85-4.75 9.73t-14 
+                  2.87H235.5q-16.35 0-25 7.62t-8.61 27.52v38.75h-3.57q-16.54 
+                  0-23.68-4.62c-4.74-3.08-7.12-25.72-7.12-33.94v-35.8h-37v40c0 
+                  23.1 5 56.07 15 64.93s24.52 13.28 43.51 13.28h57q15.79 0 24.06 5t8.28 
+                  16.94v20.79h37v-20.74q0-11.94 8.28-16.94t24.45-5h56.6q28.49 0 
+                  43.51-13.28c10-8.86 15-41.83 15-64.93v-40zm-112 83.41q-13.1 9-16.94 
+                  29.84-4.62-20.79-17.72-29.84t-37.72-9.05h-18.76v-36.32q0-7.08 
+                  4.2-9.72t13.48-2.66h25q14.14 0 21.66-5.19t9.7-17.16q2.64 11.94 
+                  10.16 17.13t21.68 5.22h25q9.51 0 13.6 2.66t4.08 9.72v36.32H352q-24.69 
+                  0-37.77 9.05zM129.62 355.43h.13q-.51-12.4-.51-25.19c0-4.72 0-9.3.08-13.78a23.87 
+                  23.87 0 01-23.61-23.86c0-13.19 11.69-23.79 24.87-23.88h.71a321.42 321.42 0 
+                  014.76-36.53h-.25c16.5-80.65 83.77-141.06 161.57-141.06S441.7 151.54 458 
+                  232.2h-.08a323.7 323.7 0 014.76 36.53h.7c13.19.09 24.88 10.69 24.88 23.88a23.87 
+                  23.87 0 01-23.61 23.86c.05 4.48.08 9.06.08 13.78q0 12.78-.51 25.19h.13c34.39 0 
+                  62.28-26.88 62.28-61.27a62 62 0 00-11.69-36.3 62.76 62.76 0 
+                  00-15.26-15c-15.37-107.43-101.47-189.7-202.42-189.7S110.44 135.22 94.91 
+                  242.45a62.39 62.39 0 00-27.57 51.71c0 34.39 27.88 61.27 62.28 61.27z" />
+                <circle cx="222.08" cy="298.69" r="32.02" />
+                <circle cx="373.08" cy="298.69" r="32.02" />
+              </g>
+            </svg>
+          </a>
           <button class="swipe-right-button" title="I like it!">
               <img src="${thumbsUpUri}"/>
           </button>
         </footer>
-				<script nonce="${nonce}" src="${scriptUri}"></script>
-        <script>
-          document.querySelector('#thmImg').addEventListener('load', () => {
-            document.querySelector('.loadingImage').classList.toggle("loadingImage");
-            document.querySelector('.swipe-left-button').style.cursor = "pointer";
-            document.querySelector('.swipe-right-button').style.cursor = "pointer";
-          })
-        </script>
-			</body>
-			</html>`;
+		<script nonce="${nonce}" src="${scriptUri}"></script>
+	</body>
+	</html>`;
   }
 }
 
