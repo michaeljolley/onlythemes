@@ -115,7 +115,7 @@ section {
 .link {
   background: url('./link.svg') no-repeat;
 }
-/* not needed, but maybe used for other styling
+/* not needed, but maybe it will be used for other styling
 .repo {
   background: url('./bbb.svg') no-repeat;
 }
