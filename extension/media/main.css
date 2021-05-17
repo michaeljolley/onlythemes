@@ -2,6 +2,7 @@
   --blue: #44484A;
   --gray: #B3B7B9;
   --dark-gray: #656F73;
+  --darker-gray: #353b3d;
 }
 
 body {
@@ -115,11 +116,10 @@ section {
 .link {
   background: url('./link.svg') no-repeat;
 }
-/* not needed, but maybe it will be used for other styling
 .repo {
   background: url('./bbb.svg') no-repeat;
 }
-*/
+
 .swipe-left-button, .swipe-right-button {
   border-radius: 2.5rem;
   box-shadow: 0px 3px 8px rgb(0 0 0 / 25%);
@@ -133,6 +133,12 @@ section {
 .swipe-right-button:hover,
 .swipe-right-button:active {
   background-color: #65D5FA;
+}
+
+.swipe-left-button:disabled,
+.swipe-right-button:disabled {
+  visibility: hidden;
+  cursor: not-allowed;
 }
 
 .vs, .vs-dark, .hc-black, .link, .repo {
@@ -168,40 +174,45 @@ header {
     font-size: 1rem;
   }
 }
-#thmImg{
-  display: inline-block;
+
+.loader,
+.loader:after {
+  background-image: none;
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
 }
-.loadingImage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 7px 7px;
-  background: linear-gradient(90deg,
-     #EA41F7 0%,
-     #812FED 29.69%,
-     #4E4FFF 48.96%,
-     #5786FD 69.27%,
-     #65D5FA 100%);
-  border-radius: 1rem;
-  z-index: 1;
-  animation: animatedgradient 3s ease alternate infinite;
-  background-size: 300% 300%;
-  opacity: 0.45;
+.loader {
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid #ff00ff13;
+  border-right: 1.1em solid #ff00ff13;
+  border-bottom: 1.1em solid #ff00ff13;
+  border-left: 1.1em solid #ff00ff;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
 }
-@keyframes animatedgradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    25% {
-        background-position: 100% 50%;
-    }
-    50% {
-        background-position: 100% 500%;
-    }
-    75% {
-        background-position: 50% 100%;
-    }
-    100% {
-        background-position: 100% 0%;
-    }
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }

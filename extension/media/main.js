@@ -20,22 +20,10 @@
     previewTheme(event);
   });
 
-  // Handle messages sent from the extension to the webview
-  window.addEventListener('message', event => {
-    const message = event.data; // The json data that the extension sent
-    switch (message.type) {
-      case 'loadTheme':
-        {
-          //loadTheme(message.data);
-          break;
-        }
-    }
-  });
-
-  function displayLoadingStyle(){
-    document.querySelector('#thmImgHolder').classList.toggle("loadingImage");
-    document.querySelector('.swipe-left-button').style.cursor = "not-allowed";
-    document.querySelector('.swipe-right-button').style.cursor = "not-allowed";
+  function displayLoadingStyle() {
+    document.querySelector('.swipe-left-button').setAttribute('disabled', true);
+    document.querySelector('.swipe-right-button').setAttribute('disabled', true);
+    document.querySelector('.repo').classList.add('loader');
   }
 
   function swipeLeft() {
@@ -52,10 +40,3 @@
   }
 
 }());
-
-//set mouse to pointer, and toogle the class to not/show the loading gradient
-document.querySelector('#thmImg').addEventListener('load', () => {
-  document.querySelector('.loadingImage').classList.toggle("loadingImage");
-  document.querySelector('.swipe-left-button').style.cursor = "pointer";
-  document.querySelector('.swipe-right-button').style.cursor = "pointer";
-})
