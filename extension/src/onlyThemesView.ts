@@ -196,13 +196,11 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
             <h2>by ${extension.publisher.displayName}</h2>
           </header>
           <main>
-            <a
-              title="Click to expand"
+            <a title="Click to expand"
               id="preview"
               href="#">
-              <img src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
-                theme.id
-              }">
+              <img id="thmImg"  src="https://onlythemes.azurewebsites.net/api/ThemeImage?themeId=${
+                theme.id}">
             </a>
             <section>
               <div class="mode ${theme.type}"></div>
@@ -213,17 +211,18 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
           </main>
         </article>
         <footer>
-          <button class="swipe-left-button" title="Not interested">
+          <button class="btn swipe-left-button" title="Not interested">
             <img src="${thumbsDownUri}"/>
           </button>
-          <a class="repo" href="https://bbb.dev/onlythemes" title="See the code"></a>
-          <button class="swipe-right-button" title="I like it!">
-            <img src="${thumbsUpUri}"/>
+          <a class="repo" href="https://bbb.dev/onlythemes" title="See the code">
+          </a>
+          <button class="btn swipe-right-button" title="I like it!">
+              <img src="${thumbsUpUri}"/>
           </button>
         </footer>
-				<script nonce="${nonce}" src="${scriptUri}"></script>
-			</body>
-			</html>`;
+		<script nonce="${nonce}" src="${scriptUri}"></script>
+	</body>
+	</html>`;
   }
 }
 

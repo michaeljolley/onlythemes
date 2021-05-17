@@ -8,27 +8,23 @@
 
   document.querySelector('.swipe-left-button').addEventListener('click', () => {
     swipeLeft();
+    displayLoadingStyle();
   });
 
   document.querySelector('.swipe-right-button').addEventListener('click', () => {
     swipeRight();
+    displayLoadingStyle();
   });
 
   document.querySelector('#preview').addEventListener('click', (event) => {
     previewTheme(event);
   });
 
-  // Handle messages sent from the extension to the webview
-  window.addEventListener('message', event => {
-    const message = event.data; // The json data that the extension sent
-    switch (message.type) {
-      case 'loadTheme':
-        {
-          //loadTheme(message.data);
-          break;
-        }
-    }
-  });
+  function displayLoadingStyle() {
+    document.querySelector('.swipe-left-button').setAttribute('disabled', true);
+    document.querySelector('.swipe-right-button').setAttribute('disabled', true);
+    document.querySelector('.repo').classList.add('loader');
+  }
 
   function swipeLeft() {
     vscode.postMessage({ type: 'swipeLeft' });
@@ -44,4 +40,3 @@
   }
 
 }());
-
