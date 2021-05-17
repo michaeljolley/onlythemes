@@ -12,6 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@whitep4nth3r/random-code": "^1.0.11",
     "axios": "^0.21.1",
     "color2": "^1.0.8",
     "comment-json": "^4.1.0",

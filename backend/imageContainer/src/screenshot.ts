@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 
-export const screenshot = async (themeId: string): Promise<boolean> => {
+export const screenshot = async (themeId: string, lang: string): Promise<boolean> => {
 
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
@@ -19,7 +19,7 @@ export const screenshot = async (themeId: string): Promise<boolean> => {
 
   await page.waitForTimeout(2000);
 
-  await page.type('.ibwrapper input', 'superApp.js');
+  await page.type('.ibwrapper input', `sample.${lang}`);
 
   await page.waitForTimeout(1000);
 
@@ -29,7 +29,7 @@ export const screenshot = async (themeId: string): Promise<boolean> => {
 
   await page.waitForTimeout(10000);
 
-  const screenshot = await page.screenshot({ path: `/images/${themeId}.png`, fullPage: true });
+  const screenshot = await page.screenshot({ path: `/images/${themeId}.${lang}.png`, fullPage: true });
 
   await browser.close();
 

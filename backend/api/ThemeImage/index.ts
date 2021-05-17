@@ -14,8 +14,12 @@ const serviceClient = new ShareServiceClient(
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
   const themeId: string | undefined = req.query.themeId;
+  const lang: string | undefined = req.query.lang;
 
-  const fileName = `${themeId}.png`;
+  let fileName = `${themeId}.png`;
+  if(lang != undefined){
+    fileName = `${themeId}.${lang}.png`;
+  }
 
   try {
 

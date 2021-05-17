@@ -4,6 +4,21 @@ import { parse } from 'comment-json';
 
 import screenshot from './screenshot';
 import saveTheme from './saveTheme';
+import { generateRandomCode } from '@whitep4nth3r/random-code';
+
+
+const prepareCode = async (lang: string) => {
+  const path = `./sample.${lang}`;
+  await fs.writeFile(path,generateRandomCode(lang,50));
+  return path;
+}
+const prepareFiles = async () => {
+  const langs = ['js','php','go','css','java'];
+  for await (let lang of langs){
+    await prepareCode(lang);
+  }
+  return langs;
+}
 
 let extensionDir = '';
 
@@ -39,21 +54,22 @@ const main = async () => {
 
     const extensionDirs = await fs.readdir('/home/coder/.vscode/extensions');
     extensionDir = extensionDirs[0];
-
+    const langs = await prepareFiles();
     // Load the manifest
     const manifest = await loadManifest();
 
     if (manifest && manifest.contributes.themes) {
       // for each theme in manifest
       for (const manifestTheme of manifest.contributes.themes) {
-
         try {
           await setTheme(manifestTheme.label);
 
           const theme = await saveTheme(extensionDir, manifestTheme);
 
-          const imageCaptured = await screenshot(theme.id);
-
+          let imageCaptured = false;
+          for(const lang of langs){
+            imageCaptured = await screenshot(theme.id, lang) || imageCaptured;
+          }
           if (imageCaptured) {
             theme.imageCaptured = true;
             await _saveTheme(theme);
@@ -63,11 +79,9 @@ const main = async () => {
         catch (err) {
           await recordError(`${err}`);
           throw (err)
-        }
+        }  
       }
-    }
-
-    await updateExtension();
+    }  
   }
   catch (err) {
     console.log(err);

@@ -1,0 +1,1 @@
+declare module '@whitep4nth3r/random-code';
