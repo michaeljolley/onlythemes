@@ -90,7 +90,7 @@
     "test": "node ./out/tests/runTest.js"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "os-name": "^4.0.0",
     "public-ip": "^4.0.3",
     "universal-analytics": "^0.4.23",
