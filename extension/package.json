@@ -92,7 +92,7 @@
   "dependencies": {
     "node-fetch": "^2.6.1",
     "os-name": "^4.0.0",
-    "public-ip": "^4.0.3",
+    "public-ip": "^5.0.0",
     "universal-analytics": "^0.4.23",
     "uuid": "^8.3.2"
   },
