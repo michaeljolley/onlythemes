@@ -1,7 +1,7 @@
 {
   "name": "onlythemes",
   "displayName": "Only Themes",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Find that special theme you've been looking for.",
   "main": "./dist/extension",
   "repository": {
