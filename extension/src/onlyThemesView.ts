@@ -82,7 +82,10 @@ export class OnlyThemesViewProvider implements vscode.WebviewViewProvider {
           const response = await fetch(
             `https://onlythemes.azurewebsites.net/api/ThemeSuggest?userId=${userId}`
           );
-          const { theme, extension } = await response.json();
+          const { theme, extension } = (await response.json()) as {
+            theme: any;
+            extension: any;
+          };
 
           if (theme && extension) {
             this.theme = theme;
