@@ -10,20 +10,20 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@azure/arm-containerinstance": "^6.1.0",
-    "@azure/cosmos": "^3.9.5",
-    "@azure/ms-rest-nodeauth": "^3.0.0",
-    "@azure/storage-file-share": "^12.5.0",
-    "axios": "^0.21.1",
-    "durable-functions": "^1.4.6",
-    "puppeteer": "^8.0.0",
-    "redis": "^3.1.2",
+    "@azure/arm-containerinstance": "^8.1.0",
+    "@azure/cosmos": "^3.16.1",
+    "@azure/ms-rest-nodeauth": "^3.1.1",
+    "@azure/storage-file-share": "^12.10.0",
+    "axios": "^0.27.2",
+    "durable-functions": "^2.0.2",
+    "puppeteer": "^14.4.1",
+    "redis": "^4.1.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@azure/functions": "^1.0.2-beta2",
-    "@types/node": "^14.14.31",
-    "@types/redis": "^2.8.28",
-    "typescript": "^3.3.3"
+    "@azure/functions": "^3.2.0",
+    "@types/node": "^18.0.0",
+    "@types/redis": "^4.0.10",
+    "typescript": "^4.7.4"
   }
 }
