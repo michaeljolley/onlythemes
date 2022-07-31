@@ -15,7 +15,7 @@
     "axios": "^0.27.2",
     "color2": "^1.0.8",
     "comment-json": "^4.2.2",
-    "puppeteer": "^14.4.1"
+    "puppeteer": "^13.3.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
